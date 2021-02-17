@@ -2243,7 +2243,7 @@
 }
 html {
   background-color: #f6f6f6;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.5;
   overflow-x: hidden;
 }
@@ -4008,6 +4008,7 @@ pre .javascript .function {
   float: left;
   width: 80%;
   padding-right: 30px;
+  opacity: 1;
 }
 .post-toc-wrap {
   position: fixed;
