@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Language" content="zh-cn">
+  <meta charset="utf-8">
+  
+      
+          
+            <title>
+              
+                Vue源码阅读(1) |
+                  
+                    Blog
+                       |
+                        Blog
+                          
+            </title>
+            <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+            
+              <meta name="theme-color" content="#77AAFF">
+              
+                
+                  <meta name="keywords" content="Vue">
+
+                  
+
+                    
+
+                      <!-- Baidu Push -->
+<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+
+	var _hmt = _hmt || [];
+</script>
+
+
+
+
+                        <meta name="description" content="文章摘要：通过阅读Vue源码来深入学习Vue，本文章主要介绍Vue的数据驱动部分源码。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue源码阅读(1)">
+<meta property="og:url" content="https://jrr997.github.io/blog/2021/02/20/vue-src-readding-1/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:description" content="文章摘要：通过阅读Vue源码来深入学习Vue，本文章主要介绍Vue的数据驱动部分源码。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ustbhuangyi.github.io/vue-analysis/assets/new-vue.png">
+<meta property="article:published_time" content="2021-02-20T15:58:19.000Z">
+<meta property="article:modified_time" content="2021-02-20T16:12:21.741Z">
+<meta property="article:author" content="Zack Chang">
+<meta property="article:tag" content="Vue">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ustbhuangyi.github.io/vue-analysis/assets/new-vue.png">
+                          
+                            <link rel="alternate" type="application/atom+xml" title="Blog" href="/blog/atom.xml">
+                            
+                              <link rel="shortcut icon" href="/blog/img/favicon.ico">
+                                <link id="style" rel="stylesheet" href="/blog/css/style.css?v=3.0">
+                                <script>
+                                  window.lazyScripts = []
+                                </script>
+
+                                <!-- custom head -->
+                                
+
+<meta name="generator" content="Hexo 5.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+    <aside id="menu" class="hide"
+   >
+    <div class="inner flex-row-vertical">
+      <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+      </a>
+      <div class="brand-wrap">
+        <div class="brand">
+          <a href="/blog/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/blog/img/mypic.jpg" alt="avatar">
+        </a>
+          <hgroup class="introduce">
+            <h5 class="nickname" id="name">
+              Zack Chang
+            </h5>
+            
+                <div id="yiyanmotto" class="motto">&nbsp;</div>
+                
+          </hgroup>
+        </div>
+      </div>
+      <div class="scroll-wrap flex-col">
+        <ul class="nav">
+          
+            <li class="waves-block waves-effect active">
+              <a href="/blog/"  >
+                    <i class="icon icon-lg icon-home"></i>
+                    <span>主 页</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+            </li>
+            
+            <li class="waves-block waves-effect active">
+              <a href="/blog/categories"  >
+                    <i class="icon icon-lg icon-th-list"></i>
+                    <span>分 类</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+            </li>
+            
+            <li class="waves-block waves-effect active">
+              <a href="/blog/tags"  >
+                    <i class="icon icon-lg icon-tags"></i>
+                    <span>标 签</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+            </li>
+            
+            <li class="waves-block waves-effect active">
+              <a href="/blog/about"  >
+                    <i class="icon icon-lg icon-smile-o"></i>
+                    <span>关 于</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+            </li>
+            
+              <div class="nav2">
+                
+                  <a class="nav2item" data-title="Email" href="mailto:997571692@qq.com" target="_parent"title="Email" >
+                <i class="icon icon-lg icon-envelope-o envelope-o"></i>
+              </a>
+                  
+                  <a class="nav2item" data-title="Github" href="https://github.com/jrr997" target="_blank"title="Github" >
+                <i class="icon icon-lg icon-github github"></i>
+              </a>
+                  
+                  <a class="nav2item" data-title="微博" href="/blog/null" target="_blank"title="微博" >
+                <i class="icon icon-lg icon-weibo weibo"></i>
+              </a>
+                  
+
+              </div>
+
+        </ul>
+
+      </div>
+    </div>
+
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Vue源码阅读(1)</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        <a href="../../atom.xml" target="_blank" class="header-icon waves-effect waves-circle waves-light" id="Rss">
+            <i class="icon icon-lg icon-rss"></i>
+        </a>
+    </div>
+</header>
+<header class="content-header post-header">
+    
+    
+    <div class="container fade-scale">
+        <div id="myheader">
+            <h1 class="title">
+                
+            </h1>
+            <h5 class="subtitle">
+                
+                
+            </h5>
+        </div>
+    </div>
+
+</header>
+
+  
+    <div class="container body-wrap">
+      
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E6%96%87%E7%AB%A0%E6%91%98%E8%A6%81%EF%BC%9A%E9%80%9A%E8%BF%87%E9%98%85%E8%AF%BBVue%E6%BA%90%E7%A0%81%E6%9D%A5%E6%B7%B1%E5%85%A5%E5%AD%A6%E4%B9%A0Vue%EF%BC%8C%E6%9C%AC%E6%96%87%E7%AB%A0%E4%B8%BB%E8%A6%81%E4%BB%8B%E7%BB%8DVue%E7%9A%84%E6%95%B0%E6%8D%AE%E9%A9%B1%E5%8A%A8%E9%83%A8%E5%88%86%E6%BA%90%E7%A0%81%E3%80%82"><span class="post-toc-number">1.</span> <span class="post-toc-text">文章摘要：通过阅读Vue源码来深入学习Vue，本文章主要介绍Vue的数据驱动部分源码。</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Vue%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB"><span class="post-toc-number"></span> <span class="post-toc-text">Vue源码阅读</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E4%B8%80%E3%80%81vue%E7%9A%84%E6%BA%90%E7%A0%81%E7%9B%AE%E5%BD%95%E8%AE%BE%E8%AE%A1"><span class="post-toc-number"></span> <span class="post-toc-text">一、vue的源码目录设计</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#compiler"><span class="post-toc-number"></span> <span class="post-toc-text">compiler</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#core"><span class="post-toc-number"></span> <span class="post-toc-text">core</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Vue%E5%85%A5%E5%8F%A3"><span class="post-toc-number"></span> <span class="post-toc-text">Vue入口</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E4%BA%8C%E3%80%81%E6%95%B0%E6%8D%AE%E9%A9%B1%E5%8A%A8"><span class="post-toc-number"></span> <span class="post-toc-text">二、数据驱动</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#new-Vue-%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="post-toc-number"></span> <span class="post-toc-text">new Vue 发生了什么？</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Vue%E5%AE%9E%E4%BE%8B%E7%9A%84%E6%8C%82%E8%BD%BD"><span class="post-toc-number"></span> <span class="post-toc-text">Vue实例的挂载</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E6%80%BB%E7%BB%93"><span class="post-toc-number">1.</span> <span class="post-toc-text">总结</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#vm-render"><span class="post-toc-number"></span> <span class="post-toc-text">vm._render</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Virtual-DOM"><span class="post-toc-number"></span> <span class="post-toc-text">Virtual DOM</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#createElement"><span class="post-toc-number"></span> <span class="post-toc-text">createElement</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#vm-update"><span class="post-toc-number"></span> <span class="post-toc-text">vm._update</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E6%80%BB%E7%BB%93-1"><span class="post-toc-number"></span> <span class="post-toc-text">总结</span></a>
+        </nav>
+    </aside>
+   
+  <article id="post-vue-src-readding-1" class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+      <h1 class="post-card-title">
+        Vue源码阅读(1)
+      </h1>
+      <div class="post-meta">
+        <i class="icon icon-lg icon-calendar-o"></i> 发表于
+        <time class="post-time" title="2021-02-20 23:58:19" datetime="2021-02-20T15:58:19.000Z"  itemprop="datePublished">2021-02-20</time>
+
+          <br id="mybreak" />
+          
+<script>
+	mybreak.style="display:none";
+</script>
+
+
+            <i>·</i>
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>次浏览
+</span>
+
+
+      </div>
+      <div class="post-count-custom">
+        <i class="icon icon-lg icon-comment-o"></i> 阅读本文可能花费您&nbsp;
+        <span class="post-count">10</span>&nbsp;分钟
+      </div>
+      <div class="post-content" id="post-content" itemprop="postContent">
+        <h5 id="文章摘要：通过阅读Vue源码来深入学习Vue，本文章主要介绍Vue的数据驱动部分源码。"><a href="#文章摘要：通过阅读Vue源码来深入学习Vue，本文章主要介绍Vue的数据驱动部分源码。" class="headerlink" title="文章摘要：通过阅读Vue源码来深入学习Vue，本文章主要介绍Vue的数据驱动部分源码。"></a>文章摘要：通过阅读Vue源码来深入学习Vue，本文章主要介绍Vue的数据驱动部分源码。<a id="more"></a></h5><p>作为学习者，这篇文章主要是参考<a target="_blank" rel="noopener" href="https://ustbhuangyi.github.io/vue-analysis/v2/prepare/">https://ustbhuangyi.github.io/vue-analysis/v2/prepare/</a></p>
+<h1 id="Vue源码阅读"><a href="#Vue源码阅读" class="headerlink" title="Vue源码阅读"></a>Vue源码阅读</h1><h2 id="一、vue的源码目录设计"><a href="#一、vue的源码目录设计" class="headerlink" title="一、vue的源码目录设计"></a>一、vue的源码目录设计</h2><figure class="highlight text"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">src</span><br><span class="line">├── compiler        # 编译相关 </span><br><span class="line">├── core            # 核心代码 </span><br><span class="line">├── platforms       # 不同平台的支持</span><br><span class="line">├── server          # 服务端渲染</span><br><span class="line">├── sfc             # .vue 文件解析</span><br><span class="line">├── shared          # 共享代码</span><br></pre></td></tr></tbody></table></figure>
+<h4 id="compiler"><a href="#compiler" class="headerlink" title="compiler"></a>compiler</h4><p>compiler 目录包含 Vue.js 所有编译相关的代码。它包括把模板解析成 ast 语法树，ast 语法树优化，代码生成等功能。</p>
+<h4 id="core"><a href="#core" class="headerlink" title="core"></a>core</h4><p>core 目录包含了 Vue.js 的核心代码，包括内置组件、全局 API 封装，Vue 实例化、观察者、虚拟 DOM、工具函数等等。</p>
+<h4 id="Vue入口"><a href="#Vue入口" class="headerlink" title="Vue入口"></a>Vue入口</h4><p>Vue入口在</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">src/core/instance/index.js</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight javascript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> { initMixin } <span class="keyword">from</span> <span class="string">'./init'</span></span><br><span class="line"><span class="keyword">import</span> { stateMixin } <span class="keyword">from</span> <span class="string">'./state'</span></span><br><span class="line"><span class="keyword">import</span> { renderMixin } <span class="keyword">from</span> <span class="string">'./render'</span></span><br><span class="line"><span class="keyword">import</span> { eventsMixin } <span class="keyword">from</span> <span class="string">'./events'</span></span><br><span class="line"><span class="keyword">import</span> { lifecycleMixin } <span class="keyword">from</span> <span class="string">'./lifecycle'</span></span><br><span class="line"><span class="keyword">import</span> { warn } <span class="keyword">from</span> <span class="string">'../util/index'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Vue</span> (<span class="params">options</span>) </span>{</span><br><span class="line">  <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span> &amp;&amp;</span><br><span class="line">    !(<span class="built_in">this</span> <span class="keyword">instanceof</span> Vue)</span><br><span class="line">  ) {</span><br><span class="line">    warn(<span class="string">'Vue is a constructor and should be called with the `new` keyword'</span>)</span><br><span class="line">  }</span><br><span class="line">  <span class="built_in">this</span>._init(options)</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">initMixin(Vue)</span><br><span class="line">stateMixin(Vue)</span><br><span class="line">eventsMixin(Vue)</span><br><span class="line">lifecycleMixin(Vue)</span><br><span class="line">renderMixin(Vue)</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> Vue</span><br></pre></td></tr></tbody></table></figure>
+<p>这里可以看出Vue是一个构造函数。我们可以看到Vue被传入很多<code>xxxMixin</code> 函数中，这些函数的作用是给Vue.prototype扩展方法。</p>
+<p><code>initGlobalAPI</code></p>
+<p>Vue.js 在整个初始化过程中，除了给它的原型 prototype 上扩展方法，还会给 <code>Vue</code> 这个对象本身扩展全局的静态方法，它的定义在 <code>src/core/global-api/index.js</code> 中，全局方法包括set、delete、nextTick等。</p>
+<h2 id="二、数据驱动"><a href="#二、数据驱动" class="headerlink" title="二、数据驱动"></a>二、数据驱动</h2><p>Vue.js 一个核心思想是数据驱动。数据驱动是指数据驱动视图的生成，我们只用修改数据，视图就会发生相应的修改，免去操作DOM来修改视图的步骤。</p>
+<h4 id="new-Vue-发生了什么？"><a href="#new-Vue-发生了什么？" class="headerlink" title="new Vue 发生了什么？"></a>new Vue 发生了什么？</h4><figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Vue</span> (<span class="params">options</span>) </span>{</span><br><span class="line">  <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span> &amp;&amp;</span><br><span class="line">    !(<span class="built_in">this</span> <span class="keyword">instanceof</span> Vue)</span><br><span class="line">  ) {</span><br><span class="line">    warn(<span class="string">'Vue is a constructor and should be called with the `new` keyword'</span>)</span><br><span class="line">  }</span><br><span class="line">  <span class="built_in">this</span>._init(options)</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>从这里可见，new Vue后执行了this._init方法，并传入了options，而this_init方法主要做了这些事情：合并配置，初始化生命周期，初始化事件中心，初始化渲染，初始化 data、props、computed、watcher 等等。下面是this._init的部分代码。</p>
+<figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* istanbul ignore else */</span></span><br><span class="line">  <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) {</span><br><span class="line">    initProxy(vm)</span><br><span class="line">  } <span class="keyword">else</span> {</span><br><span class="line">    vm._renderProxy = vm</span><br><span class="line">  }</span><br><span class="line">  <span class="comment">// expose real self</span></span><br><span class="line">  vm._self = vm</span><br><span class="line">  initLifecycle(vm)</span><br><span class="line">  initEvents(vm)</span><br><span class="line">  initRender(vm)</span><br><span class="line">  callHook(vm, <span class="string">'beforeCreate'</span>)</span><br><span class="line">  initInjections(vm) <span class="comment">// resolve injections before data/props</span></span><br><span class="line">  initState(vm)</span><br><span class="line">  initProvide(vm) <span class="comment">// resolve provide after data/props</span></span><br><span class="line">  callHook(vm, <span class="string">'created'</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>在beforeCreate前，Vue已经初始化了生命周期、时间和渲染，在beforeCreate和created之间有一个initState方法，initState主要是初始化data、props等属性。意思是beforeCreate不能拿到data、props、methods、computed等，要在created中拿。</p>
+<h4 id="Vue实例的挂载"><a href="#Vue实例的挂载" class="headerlink" title="Vue实例的挂载"></a>Vue实例的挂载</h4><p><code>compiler</code> 版本的 <code>$mount</code> 实现非常有意思，先来看一下 <code>src/platform/web/entry-runtime-with-compiler.js</code> 文件中定义：</p>
+<figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> mount = Vue.prototype.$mount</span><br><span class="line">Vue.prototype.$mount = <span class="function"><span class="keyword">function</span> (<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">  el?: string | Element,</span></span></span><br><span class="line"><span class="function"><span class="params">  hydrating?: boolean</span></span></span><br><span class="line"><span class="function"><span class="params"></span>): <span class="title">Component</span> </span>{</span><br><span class="line">  el = el &amp;&amp; query(el)</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* istanbul ignore if */</span></span><br><span class="line">  <span class="keyword">if</span> (el === <span class="built_in">document</span>.body || el === <span class="built_in">document</span>.documentElement) {</span><br><span class="line">    process.env.NODE_ENV !== <span class="string">'production'</span> &amp;&amp; warn(</span><br><span class="line">      <span class="string">`Do not mount Vue to &lt;html&gt; or &lt;body&gt; - mount to normal elements instead.`</span></span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span></span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> options = <span class="built_in">this</span>.$options</span><br><span class="line">  <span class="comment">// resolve template/el and convert to render function</span></span><br><span class="line">  <span class="keyword">if</span> (!options.render) {</span><br><span class="line">    <span class="keyword">let</span> template = options.template</span><br><span class="line">    <span class="keyword">if</span> (template) {</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">typeof</span> template === <span class="string">'string'</span>) {</span><br><span class="line">        <span class="keyword">if</span> (template.charAt(<span class="number">0</span>) === <span class="string">'#'</span>) {</span><br><span class="line">          template = idToTemplate(template)</span><br><span class="line">          <span class="comment">/* istanbul ignore if */</span></span><br><span class="line">          <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span> &amp;&amp; !template) {</span><br><span class="line">            warn(</span><br><span class="line">              <span class="string">`Template element not found or is empty: <span class="subst">${options.template}</span>`</span>,</span><br><span class="line">              <span class="built_in">this</span></span><br><span class="line">            )</span><br><span class="line">          }</span><br><span class="line">        }</span><br><span class="line">      } <span class="keyword">else</span> <span class="keyword">if</span> (template.nodeType) {</span><br><span class="line">        template = template.innerHTML</span><br><span class="line">      } <span class="keyword">else</span> {</span><br><span class="line">        <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) {</span><br><span class="line">          warn(<span class="string">'invalid template option:'</span> + template, <span class="built_in">this</span>)</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span></span><br><span class="line">      }</span><br><span class="line">    } <span class="keyword">else</span> <span class="keyword">if</span> (el) {</span><br><span class="line">      template = getOuterHTML(el)</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">if</span> (template) {</span><br><span class="line">      <span class="comment">/* istanbul ignore if */</span></span><br><span class="line">      <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span> &amp;&amp; config.performance &amp;&amp; mark) {</span><br><span class="line">        mark(<span class="string">'compile'</span>)</span><br><span class="line">      }</span><br><span class="line"></span><br><span class="line">      <span class="keyword">const</span> { render, staticRenderFns } = compileToFunctions(template, {</span><br><span class="line">        shouldDecodeNewlines,</span><br><span class="line">        shouldDecodeNewlinesForHref,</span><br><span class="line">        delimiters: options.delimiters,</span><br><span class="line">        comments: options.comments</span><br><span class="line">      }, <span class="built_in">this</span>)</span><br><span class="line">      options.render = render</span><br><span class="line">      options.staticRenderFns = staticRenderFns</span><br><span class="line"></span><br><span class="line">      <span class="comment">/* istanbul ignore if */</span></span><br><span class="line">      <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span> &amp;&amp; config.performance &amp;&amp; mark) {</span><br><span class="line">        mark(<span class="string">'compile end'</span>)</span><br><span class="line">        measure(<span class="string">`vue <span class="subst">${<span class="built_in">this</span>._name}</span> compile`</span>, <span class="string">'compile'</span>, <span class="string">'compile end'</span>)</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">return</span> mount.call(<span class="built_in">this</span>, el, hydrating)</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>在<code>runtime-with-compiler</code>版本的代码中，<code>const mount = Vue.prototype.$mount</code>缓存了<code>runtime-only</code>的<code>$mount</code>，然后重写了<code>$mount</code>方法，这个重写的<code>$mount</code>方法主要做了两件事情：</p>
+<p>第一步：Vue实例通过<code>$mount </code>来挂载vm，且<code>$mount </code>限制Vue实例不能挂载到<code>body</code>和<code>html</code>根节点上。</p>
+<p>第二步：把<code>el</code>和<code>template</code>字符串转化为<code>render</code>方法。Vue 2.0 版本中，所有 Vue 的组件的渲染最终都需要 <code>render</code> 方法。</p>
+<p>做完这两步之后，会执行之前缓存的<code>runtime-only</code>的<code>$mount</code>。这个挂载是真正的挂载。</p>
+<figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// public mount method</span></span><br><span class="line">Vue.prototype.$mount = <span class="function"><span class="keyword">function</span> (<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">  el?: string | Element,</span></span></span><br><span class="line"><span class="function"><span class="params">  hydrating?: boolean</span></span></span><br><span class="line"><span class="function"><span class="params"></span>): <span class="title">Component</span> </span>{</span><br><span class="line">  el = el &amp;&amp; inBrowser ? query(el) : <span class="literal">undefined</span></span><br><span class="line">  <span class="keyword">return</span> mountComponent(<span class="built_in">this</span>, el, hydrating)</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>原先的<code>$mount</code> 方法实际上会去调用 <code>mountComponent</code> 方法，这个方法定义在 <code>src/core/instance/lifecycle.js</code> 文件中：</p>
+<figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">mountComponent</span> (<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">  vm: Component,</span></span></span><br><span class="line"><span class="function"><span class="params">  el: ?Element,</span></span></span><br><span class="line"><span class="function"><span class="params">  hydrating?: boolean</span></span></span><br><span class="line"><span class="function"><span class="params"></span>): <span class="title">Component</span> </span>{</span><br><span class="line">  vm.$el = el</span><br><span class="line">  <span class="keyword">if</span> (!vm.$options.render) {</span><br><span class="line">    vm.$options.render = createEmptyVNode</span><br><span class="line">    <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) {</span><br><span class="line">      <span class="comment">/* istanbul ignore if */</span></span><br><span class="line">      <span class="keyword">if</span> ((vm.$options.template &amp;&amp; vm.$options.template.charAt(<span class="number">0</span>) !== <span class="string">'#'</span>) ||</span><br><span class="line">        vm.$options.el || el) {</span><br><span class="line">        warn(</span><br><span class="line">          <span class="string">'You are using the runtime-only build of Vue where the template '</span> +</span><br><span class="line">          <span class="string">'compiler is not available. Either pre-compile the templates into '</span> +</span><br><span class="line">          <span class="string">'render functions, or use the compiler-included build.'</span>,</span><br><span class="line">          vm</span><br><span class="line">        )</span><br><span class="line">      } <span class="keyword">else</span> {</span><br><span class="line">        warn(</span><br><span class="line">          <span class="string">'Failed to mount component: template or render function not defined.'</span>,</span><br><span class="line">          vm</span><br><span class="line">        )</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">  callHook(vm, <span class="string">'beforeMount'</span>)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> updateComponent</span><br><span class="line">  <span class="comment">/* istanbul ignore if */</span></span><br><span class="line">  <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span> &amp;&amp; config.performance &amp;&amp; mark) {</span><br><span class="line">    updateComponent = <span class="function">() =&gt;</span> {</span><br><span class="line">      <span class="keyword">const</span> name = vm._name</span><br><span class="line">      <span class="keyword">const</span> id = vm._uid</span><br><span class="line">      <span class="keyword">const</span> startTag = <span class="string">`vue-perf-start:<span class="subst">${id}</span>`</span></span><br><span class="line">      <span class="keyword">const</span> endTag = <span class="string">`vue-perf-end:<span class="subst">${id}</span>`</span></span><br><span class="line"></span><br><span class="line">      mark(startTag)</span><br><span class="line">      <span class="keyword">const</span> vnode = vm._render()</span><br><span class="line">      mark(endTag)</span><br><span class="line">      measure(<span class="string">`vue <span class="subst">${name}</span> render`</span>, startTag, endTag)</span><br><span class="line"></span><br><span class="line">      mark(startTag)</span><br><span class="line">      vm._update(vnode, hydrating)</span><br><span class="line">      mark(endTag)</span><br><span class="line">      measure(<span class="string">`vue <span class="subst">${name}</span> patch`</span>, startTag, endTag)</span><br><span class="line">    }</span><br><span class="line">  } <span class="keyword">else</span> {</span><br><span class="line">    updateComponent = <span class="function">() =&gt;</span> {</span><br><span class="line">      vm._update(vm._render(), hydrating)</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="comment">// we set this to vm._watcher inside the watcher's constructor</span></span><br><span class="line">  <span class="comment">// since the watcher's initial patch may call $forceUpdate (e.g. inside child</span></span><br><span class="line">  <span class="comment">// component's mounted hook), which relies on vm._watcher being already defined</span></span><br><span class="line">  <span class="keyword">new</span> Watcher(vm, updateComponent, noop, {</span><br><span class="line">    before () {</span><br><span class="line">      <span class="keyword">if</span> (vm._isMounted) {</span><br><span class="line">        callHook(vm, <span class="string">'beforeUpdate'</span>)</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line">  }, <span class="literal">true</span> <span class="comment">/* isRenderWatcher */</span>)</span><br><span class="line">  hydrating = <span class="literal">false</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// manually mounted instance, call mounted on self</span></span><br><span class="line">  <span class="comment">// mounted is called for render-created child components in its inserted hook</span></span><br><span class="line">  <span class="keyword">if</span> (vm.$vnode == <span class="literal">null</span>) {</span><br><span class="line">    vm._isMounted = <span class="literal">true</span></span><br><span class="line">    callHook(vm, <span class="string">'mounted'</span>)</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">return</span> vm</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>这段代码说明了<code>mountComponent</code>做了两件事情：</p>
+<ol>
+<li>调用 <code>vm._render</code>生成了VNode，最终调用 <code>vm._update</code> 更新 DOM。</li>
+<li>创建<code>Watcher</code>实例，而<code>watcher</code>做又做了两件事情：<ul>
+<li>一个是初始化的时候会执行回调函数<code>callHook(vm, 'mounted')</code></li>
+<li>二是当vm 实例中的监测的数据发生变化的时候执行回调函数```callHook(vm, ‘beforeUpdate’)``</li>
+</ul>
+</li>
+</ol>
+<h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><ol>
+<li>模板转化成render函数。</li>
+<li><code>vm._render</code>生成了VNode。</li>
+<li><code>callHook(vm, 'beforeUpdate')</code></li>
+<li><code>vm._update</code> 更新 DOM。</li>
+<li><code>callHook(vm, 'mounted')</code>或者<code>callHook(vm, 'beforeUpdate')</code></li>
+</ol>
+<h4 id="vm-render"><a href="#vm-render" class="headerlink" title="vm._render"></a>vm._render</h4><p>前面提到<code>vm._render</code>,这个方法的作用就是把<code>render</code>函数生成VNode，也就是虚拟DOM。</p>
+<p>模板：</p>
+<figure class="highlight html"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"app"</span>&gt;</span></span><br><span class="line">  {{ message }}</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></tbody></table></figure>
+<p>模板转为<code>render</code>函数：</p>
+<figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">render: <span class="function"><span class="keyword">function</span> (<span class="params">createElement</span>) </span>{</span><br><span class="line">  <span class="keyword">return</span> createElement(<span class="string">'div'</span>, {</span><br><span class="line">     attrs: {</span><br><span class="line">        id: <span class="string">'app'</span></span><br><span class="line">      },</span><br><span class="line">  }, <span class="built_in">this</span>.message)</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p><code>vm._render</code>方法传入<code>render</code>函数，生成VNode，这里的<code>$createElement</code>就是创建VNode的方法。</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vnode = render.call(vm._renderProxy, vm.$createElement)</span><br></pre></td></tr></tbody></table></figure>
+
+
+<h4 id="Virtual-DOM"><a href="#Virtual-DOM" class="headerlink" title="Virtual DOM"></a>Virtual DOM</h4><p>首先必须知道为什么需要虚拟DOM？</p>
+<p>因为浏览器的DOM是十分“昂贵”的，真实DOM十分庞大，每个真实DOM都有很多属性和方法。如果我们频繁地更新真实DOM，可能会出现性能问题，因此虚拟DOM就出现了。</p>
+<p>那么什么是虚拟DOM？</p>
+<p>虚拟DOM就是描述真实DOM的JS对象，与真实DOM对比起来，虚拟DOM是轻量的。它的核心定义无非就几个关键属性，标签名、数据、子节点、键值等。</p>
+<p>虚拟DOM除了它的数据结构的定义，映射到真实的 DOM 实际上要经历 VNode 的 create、diff、patch 等过程。那么在 Vue.js 中，VNode 的 create 是通过之前提到的 <code>createElement</code> 方法创建的，我们接下来分析这部分的实现。</p>
+<h4 id="createElement"><a href="#createElement" class="headerlink" title="createElement"></a>createElement</h4><p><code>createElement</code>做两件事情</p>
+<ol>
+<li><p>children 的规范化</p>
+<p>由于 Virtual DOM 实际上是一个树状结构，每一个 VNode 可能会有若干个子节点，这些子节点应该也是 VNode 的类型。<code>_createElement</code> 接收的第 4 个参数 children 是任意类型的，因此我们需要把它们规范成 VNode 类型。</p>
+<p>在大多数情况下children都是VNode类型的，但也有例外就是 <code>functional component</code> 函数式组件返回的是一个数组而不是一个根节点，所以会通过 <code>Array.prototype.concat</code> 方法把整个 <code>children</code> 数组打平，让它的深度只有一层。</p>
+</li>
+<li><p>VNode 的创建</p>
+<ul>
+<li><p>单节点就直接创建一个VNode。</p>
+</li>
+<li><p>如果是多个节点，会用数组表示，遍历创建VNode。</p>
+</li>
+<li><p>有时候数组中会嵌套数组，这时用递归。</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>经过这两个步骤就形成了一个 VNode Tree。</p>
+<p>回到 <code>mountComponent</code> 函数的过程，我们已经知道 <code>vm._render</code> 是如何创建了一个 VNode，接下来就是要把这个 VNode 渲染成一个真实的 DOM 并渲染出来，这个过程是通过 <code>vm._update</code> 完成的，接下来分析一下这个过程。</p>
+<h4 id="vm-update"><a href="#vm-update" class="headerlink" title="vm._update"></a>vm._update</h4><p>Vue 的 <code>_update</code> 是实例的一个私有方法，它被调用的时机有 2 个，一个是首次渲染，一个是数据更新的时候；由于我们这一章节只分析首次渲染部分，数据更新部分会在之后分析响应式原理的时候涉及。<code>_update</code> 方法的作用是把 VNode 渲染成真实的 DOM，它的定义在 <code>src/core/instance/lifecycle.js</code> 中。</p>
+<p>首次渲染时vm._update的主要是调用一个<code>patch</code>方法</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// initial render</span><br><span class="line">vm.$el = vm.__patch__(vm.$el, vnode, hydrating, false /* removeOnly */)</span><br></pre></td></tr></tbody></table></figure>
+<p>其中<code>patch</code>方法又有一个<code>creatElm</code>方法，作用是根据虚拟DOM创建真实DOM。</p>
+<p>简单地讲，在首次渲染时，<code>_update</code>方法根据虚拟DOM数创建一个真实的DOM树然后插入到<code>vm.$el</code>上。</p>
+<h2 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h2><p>那么至此我们从主线上把模板和数据如何渲染成最终的 DOM 的过程分析完毕了，我们可以通过下图更直观地看到从初始化 Vue 到最终渲染的整个过程。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://ustbhuangyi.github.io/vue-analysis/assets/new-vue.png" alt="img" title="">
+                </div>
+                <div class="image-caption">img</div>
+            </figure>
+      </div>
+
+      <blockquote class="post-copyright">
+  <div class="content">
+    
+<span class="post-time">
+    最后更新：<time datetime="2021-02-20T16:12:21.741Z" itemprop="dateUpdated">2021-02-21 00:12:21</time>
+</span>
+
+
+  </div>
+  <footer>
+    <div onclick="location.href='https://jrr997.github.io/blog'">
+      <img src="/blog/img/mypic.jpg" alt="Zack Chang">
+      <a>
+        Zack Chang
+      </a>
+    </div>
+  </footer>
+</blockquote>
+
+        
+
+
+          <div class="post-footer">
+            
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Vue/" rel="tag">Vue</a></li></ul>
+
+
+              
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://jrr997.github.io/blog/2021/02/20/vue-src-readding-1/&title=《Vue源码阅读(1)》 — Blog&pic=https://jrr997.github.io/blog/img/mypic.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://jrr997.github.io/blog/2021/02/20/vue-src-readding-1/&title=《Vue源码阅读(1)》 — Blog&source=文章摘要：通过阅读Vue源码来深入学习Vue，本文章主要介绍Vue的数据驱动部分源码。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://jrr997.github.io/blog/2021/02/20/vue-src-readding-1/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Vue源码阅读(1)》 — Blog&url=https://jrr997.github.io/blog/2021/02/20/vue-src-readding-1/&via=https://jrr997.github.io/blog" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://jrr997.github.io/blog/2021/02/20/vue-src-readding-1/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+          </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/blog/2021/02/18/test/" id="post-next" class="post-nav-link">
+        <h4 class="title" data-hover="下一篇：这是一段很长很长很长很长很长很长很长很长很长很长的文字，用来测试一下标题">下一篇：这是一段很长很长很长很长很长很长很长很长很长很长的文字，用来测试一下标题</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+      
+    
+
+    
+
+    
+
+
+  </article>
+
+    </div>
+
+        <footer class="footer">
+  <div class="footer-content">
+    <!-- <span class="power">
+            <i class="icon icon-lg icon-copyright"></i>
+            2017
+            <i class="icon icon-lg icon-heart"></i>
+            <a href="https://jrr997.github.io/blog">tomotoes.com</a>
+            <br/>
+            Power by
+            <a href="https://hexo.io/" target="_blank" rel="external nofollow">Hexo</a>&nbsp;·&nbsp;
+            Theme
+            <a class="tomotoeslink" href="https://github.com/tomotoes/hexo-theme-tomotoes/" target="_blank" rel="external nofollow">tomotoes</a>
+        </span> -->
+
+    <br/>
+
+    <span id="RunTime" style="color:#a7a7a2;"></span>
+    <br/>
+
+    <span>
+            
+	<i class="icon icon-lg icon-user">
+<span id="busuanzi_container_site_uv" style='display:none'>
+       访问用户：<span id="busuanzi_value_site_uv"></span>
+    </span>人</i>
+    ·
+    <i class="icon icon-lg icon-eye">
+    <span id="busuanzi_container_site_pv" style='display:none'>
+      访问次数：<span id="busuanzi_value_site_pv"></span>
+    </span>次
+    </i>
+
+
+        </span>
+    <br/>
+
+    <span class="license"><a  target="_blank" rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">博客内容遵循 知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+  </div>
+</footer>
+
+    </main>
+    
+        
+
+    
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://jrr997.github.io/blog/2021/02/20/vue-src-readding-1/&title=《Vue源码阅读(1)》 — Blog&pic=https://jrr997.github.io/blog/img/mypic.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://jrr997.github.io/blog/2021/02/20/vue-src-readding-1/&title=《Vue源码阅读(1)》 — Blog&source=文章摘要：通过阅读Vue源码来深入学习Vue，本文章主要介绍Vue的数据驱动部分源码。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://jrr997.github.io/blog/2021/02/20/vue-src-readding-1/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Vue源码阅读(1)》 — Blog&url=https://jrr997.github.io/blog/2021/02/20/vue-src-readding-1/&via=https://jrr997.github.io/blog" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://jrr997.github.io/blog/2021/02/20/vue-src-readding-1/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p class="wechatshare">扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACKElEQVR42u3aQW7DMAwEwPz/0+61RRBlV7ILWB6fCteVND0QpMjXK36OX8/7+09fjv/q/f2nNU97MDAwbss4hs+njT/9nK8//iY/GwYGxnMY48CXHDQBJ2+SfTEwMDBWQmrCy1NDDAwMjHVGHjrbahQDAwNjrohduRpLyuB/qsUxMDBuyFgJglf/fEl/AwMD41aMo3zmUsnxZdzcSf6sg4GBsTUjD3A5aS7Ja9M+DAyM5zDyzVrSXPszfxPVxxgYGFsw8oGJNmieG4LzE2JgYOzHmAt2V1ylLY2FYWBgbM04q4WZr5CPhbXhGwMDY2/GSuhMDr1SvuarYWBg7MrIt0kSxHGIXGltfjkhBgbG1oy547btgZVUr2BjYGBszShKxPibZOP8t+2+GBgYezPaCrG9Srt82AIDA2M7RhJY58racRidu6r7MmyBgYGxNaMtUPOyM28htN0MDAyMpzHaS7S86dgWtJMlNAYGxtaMlZZk/k075NH+CzAwMJ7AyBdaHwLLG5/1CAgGBsYDGO3wVpsU5olme22HgYHxHMbcqESbGrZFctFSxcDA2JRxlE+exq0PWxRUDAyMrRntcFi7UDtmkSSmK+fBwMC4L6MNsnMhOw+ac6UyBgbGExjFFfxUgtiWwTUSAwMDo2wVnNXULII1BgYGxjDg5u/nBshObmFiYGDclrE++JVftLVNgpOv2zAwMG7IOOuKP08oV9qcS01NDAyM+zF+AJmNS6n2IkIPAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <!-- waves按钮特效 -->
+<script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+
+<!-- 主题配置脚本 -->
+<script>
+var BLOG = { ROOT: '/blog/', SHARE: true, REWARD: false };
+</script>
+
+<!-- jquery -->
+<script src="/blog/js/jquery.min.js?v=3.0"></script>
+
+<!-- 搜索 -->
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item waves-block waves-effect" onclick="location.href='{path}'">
+    <div class="title ellipsis" title="{title}">{title}</div>
+</li>
+</template>
+
+
+<!-- main博客脚本 -->
+<script src="/blog/js/main.min.js?v=3.0" ></script>
+
+<!-- 动画&配置 -->
+<script src="/blog/js/script.min.js?v=3.0" ></script>
+
+<!-- 脚本管理 -->
+<script>
+
+if(window.innerWidth > 800){
+	/* 3D标题 */
+	$(".content-header").on("mousemove", threedee);
+
+	/* 底部追随鼠标 */
+	$(".footer").hover(2);
+
+	/* gotop键的涟漪 */
+	$("#gotop").hover(1);
+
+	/* 赞赏的粒子雨 */
+	$("#reward").hover(3);
+
+	/* 微信公众号的底部渲染 */
+	$("#wechat").hover(4);
+
+    /* 标题跳动 */
+    $(".archivestitle").bumpyText();
+
+	/* 图片点击放大 */
+	const postimg = jQuery(".post-content img:not(.github-emoji)");
+	postimg.on("click",function(){
+
+		mask.classList.add("in");
+		main.classList.add("Mask");
+		menu.classList.add("Mask");
+		var myimg = this.cloneNode(true);
+		myimg.classList.add("imgShow");
+
+		setTimeout(function(){
+			jQuery(myimg).animate({
+				opacity:"1"
+			},1000);
+		},0);
+
+		document.body.appendChild(myimg);
+
+		myimg.onclick=function(){
+			document.body.removeChild(myimg);
+			mask.classList.remove("in");
+			main.classList.remove("Mask");
+			menu.classList.remove("Mask");
+		};
+
+	});
+
+}
+
+/* 名字跳动 */
+$("#name").bumpyText();
+
+
+/* 网站运行时间 */
+setInterval(function () {
+	setTime("2021/2/17");
+}, 1000);
+
+/* 文章块的淡出 */
+postshow();
+
+/* 座右铭 */
+
+   getHitokoto();
+
+
+
+/* 粘贴提示 */
+G($(".post-content"), location.href, "Zack Chang");
+
+
+/* 控制台 */
+if (window.console && window.console.log) {
+	setTimeout(function () {
+		console.log("\n %c 一个坏掉的番茄 %c  © Simon Ma  http://tomotoes.com \n\n", "color:#FFFFFB;background:#1abc9c;padding:5px 0;border-radius:.5rem 0 0 .5rem;", "color:#FFFFFB;background:#080808;padding:5px 0;border-radius:0 .5rem .5rem 0;");
+	}, 0);
+}
+
+</script>
+
+
+
+
+<!-- 公式渲染 -->
+
+
+
+<!-- 不蒜子 -->
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+</body>
+</html>
