@@ -8,7 +8,7 @@
           
             <title>
               
-                Vue源码阅读(1) |
+                Vue源码阅读(1)之数据驱动 |
                   
                     Blog
                        |
@@ -49,14 +49,14 @@
 
                         <meta name="description" content="文章摘要：通过阅读Vue源码来深入学习Vue，本文章主要介绍Vue的数据驱动部分源码。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Vue源码阅读(1)">
+<meta property="og:title" content="Vue源码阅读(1)之数据驱动">
 <meta property="og:url" content="https://jrr997.github.io/blog/2021/02/20/vue-src-readding-1/index.html">
 <meta property="og:site_name" content="Blog">
 <meta property="og:description" content="文章摘要：通过阅读Vue源码来深入学习Vue，本文章主要介绍Vue的数据驱动部分源码。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://ustbhuangyi.github.io/vue-analysis/assets/new-vue.png">
 <meta property="article:published_time" content="2021-02-20T15:58:19.000Z">
-<meta property="article:modified_time" content="2021-02-20T16:12:21.741Z">
+<meta property="article:modified_time" content="2021-02-21T13:33:10.589Z">
 <meta property="article:author" content="Zack Chang">
 <meta property="article:tag" content="Vue">
 <meta name="twitter:card" content="summary">
@@ -161,7 +161,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">Vue源码阅读(1)</div>
+        <div class="flex-col header-title ellipsis">Vue源码阅读(1)之数据驱动</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -209,7 +209,7 @@
 
     <div class="post-card">
       <h1 class="post-card-title">
-        Vue源码阅读(1)
+        Vue源码阅读(1)之数据驱动
       </h1>
       <div class="post-meta">
         <i class="icon icon-lg icon-calendar-o"></i> 发表于
@@ -217,9 +217,8 @@
 
           <br id="mybreak" />
           
-<script>
-	mybreak.style="display:none";
-</script>
+	<i class="icon icon-lg icon-folder-o"></i>
+	分类：<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/blog/categories/%E6%8A%80%E6%9C%AF/">技术</a></li></ul>
 
 
             <i>·</i>
@@ -327,7 +326,7 @@
   <div class="content">
     
 <span class="post-time">
-    最后更新：<time datetime="2021-02-20T16:12:21.741Z" itemprop="dateUpdated">2021-02-21 00:12:21</time>
+    最后更新：<time datetime="2021-02-21T13:33:10.589Z" itemprop="dateUpdated">2021-02-21 21:33:10</time>
 </span>
 
 
@@ -357,7 +356,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://jrr997.github.io/blog/2021/02/20/vue-src-readding-1/&title=《Vue源码阅读(1)》 — Blog&pic=https://jrr997.github.io/blog/img/mypic.jpg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://jrr997.github.io/blog/2021/02/20/vue-src-readding-1/&title=《Vue源码阅读(1)之数据驱动》 — Blog&pic=https://jrr997.github.io/blog/img/mypic.jpg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -367,7 +366,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://jrr997.github.io/blog/2021/02/20/vue-src-readding-1/&title=《Vue源码阅读(1)》 — Blog&source=文章摘要：通过阅读Vue源码来深入学习Vue，本文章主要介绍Vue的数据驱动部分源码。" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://jrr997.github.io/blog/2021/02/20/vue-src-readding-1/&title=《Vue源码阅读(1)之数据驱动》 — Blog&source=文章摘要：通过阅读Vue源码来深入学习Vue，本文章主要介绍Vue的数据驱动部分源码。" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -377,7 +376,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Vue源码阅读(1)》 — Blog&url=https://jrr997.github.io/blog/2021/02/20/vue-src-readding-1/&via=https://jrr997.github.io/blog" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Vue源码阅读(1)之数据驱动》 — Blog&url=https://jrr997.github.io/blog/2021/02/20/vue-src-readding-1/&via=https://jrr997.github.io/blog" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -402,7 +401,15 @@
     </div>
 
     
-<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/blog/2021/02/21/Vue-src-readding-2/" id="post-prev" class="post-nav-link">
+        <h4 class="title" >
+          上一篇：Vue源码阅读(2)之组件化
+        </h4>
+      </a>
+    </div>
   
 
   
@@ -481,7 +488,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://jrr997.github.io/blog/2021/02/20/vue-src-readding-1/&title=《Vue源码阅读(1)》 — Blog&pic=https://jrr997.github.io/blog/img/mypic.jpg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://jrr997.github.io/blog/2021/02/20/vue-src-readding-1/&title=《Vue源码阅读(1)之数据驱动》 — Blog&pic=https://jrr997.github.io/blog/img/mypic.jpg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -491,7 +498,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://jrr997.github.io/blog/2021/02/20/vue-src-readding-1/&title=《Vue源码阅读(1)》 — Blog&source=文章摘要：通过阅读Vue源码来深入学习Vue，本文章主要介绍Vue的数据驱动部分源码。" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://jrr997.github.io/blog/2021/02/20/vue-src-readding-1/&title=《Vue源码阅读(1)之数据驱动》 — Blog&source=文章摘要：通过阅读Vue源码来深入学习Vue，本文章主要介绍Vue的数据驱动部分源码。" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -501,7 +508,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Vue源码阅读(1)》 — Blog&url=https://jrr997.github.io/blog/2021/02/20/vue-src-readding-1/&via=https://jrr997.github.io/blog" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Vue源码阅读(1)之数据驱动》 — Blog&url=https://jrr997.github.io/blog/2021/02/20/vue-src-readding-1/&via=https://jrr997.github.io/blog" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>

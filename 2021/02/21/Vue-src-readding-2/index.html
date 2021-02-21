@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Language" content="zh-cn">
+  <meta charset="utf-8">
+  
+      
+          
+            <title>
+              
+                Vue源码阅读(2)之组件化 |
+                  
+                    Blog
+                       |
+                        Blog
+                          
+            </title>
+            <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+            
+              <meta name="theme-color" content="#77AAFF">
+              
+                
+                  <meta name="keywords" content="Vue">
+
+                  
+
+                    
+
+                      <!-- Baidu Push -->
+<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+
+	var _hmt = _hmt || [];
+</script>
+
+
+
+
+                        <meta name="description" content="简介组件化是Vue的一个核心思想。所谓组件化，就是把页面拆分成多个组件 (component)，每个组件依赖的 CSS、JavaScript、模板、图片等资源放在一起开发和维护。组件是资源独立的，组件在系统内部可复用，组件和组件之间可以嵌套。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue源码阅读(2)之组件化">
+<meta property="og:url" content="https://jrr997.github.io/blog/2021/02/21/Vue-src-readding-2/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:description" content="简介组件化是Vue的一个核心思想。所谓组件化，就是把页面拆分成多个组件 (component)，每个组件依赖的 CSS、JavaScript、模板、图片等资源放在一起开发和维护。组件是资源独立的，组件在系统内部可复用，组件和组件之间可以嵌套。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="c:/Users/Jrrr/Desktop/Chrome">
+<meta property="article:published_time" content="2021-02-21T13:28:51.000Z">
+<meta property="article:modified_time" content="2021-02-21T13:33:02.563Z">
+<meta property="article:author" content="Zack Chang">
+<meta property="article:tag" content="Vue">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="c:/Users/Jrrr/Desktop/Chrome">
+                          
+                            <link rel="alternate" type="application/atom+xml" title="Blog" href="/blog/atom.xml">
+                            
+                              <link rel="shortcut icon" href="/blog/img/favicon.ico">
+                                <link id="style" rel="stylesheet" href="/blog/css/style.css?v=3.0">
+                                <script>
+                                  window.lazyScripts = []
+                                </script>
+
+                                <!-- custom head -->
+                                
+
+<meta name="generator" content="Hexo 5.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+    <aside id="menu" class="hide"
+   >
+    <div class="inner flex-row-vertical">
+      <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+      </a>
+      <div class="brand-wrap">
+        <div class="brand">
+          <a href="/blog/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/blog/img/mypic.jpg" alt="avatar">
+        </a>
+          <hgroup class="introduce">
+            <h5 class="nickname" id="name">
+              Zack Chang
+            </h5>
+            
+                <div id="yiyanmotto" class="motto">&nbsp;</div>
+                
+          </hgroup>
+        </div>
+      </div>
+      <div class="scroll-wrap flex-col">
+        <ul class="nav">
+          
+            <li class="waves-block waves-effect active">
+              <a href="/blog/"  >
+                    <i class="icon icon-lg icon-home"></i>
+                    <span>主 页</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+            </li>
+            
+            <li class="waves-block waves-effect active">
+              <a href="/blog/categories"  >
+                    <i class="icon icon-lg icon-th-list"></i>
+                    <span>分 类</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+            </li>
+            
+            <li class="waves-block waves-effect active">
+              <a href="/blog/tags"  >
+                    <i class="icon icon-lg icon-tags"></i>
+                    <span>标 签</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+            </li>
+            
+            <li class="waves-block waves-effect active">
+              <a href="/blog/about"  >
+                    <i class="icon icon-lg icon-smile-o"></i>
+                    <span>关 于</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+            </li>
+            
+              <div class="nav2">
+                
+                  <a class="nav2item" data-title="Email" href="mailto:997571692@qq.com" target="_parent"title="Email" >
+                <i class="icon icon-lg icon-envelope-o envelope-o"></i>
+              </a>
+                  
+                  <a class="nav2item" data-title="Github" href="https://github.com/jrr997" target="_blank"title="Github" >
+                <i class="icon icon-lg icon-github github"></i>
+              </a>
+                  
+                  <a class="nav2item" data-title="微博" href="/blog/null" target="_blank"title="微博" >
+                <i class="icon icon-lg icon-weibo weibo"></i>
+              </a>
+                  
+
+              </div>
+
+        </ul>
+
+      </div>
+    </div>
+
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Vue源码阅读(2)之组件化</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        <a href="../../atom.xml" target="_blank" class="header-icon waves-effect waves-circle waves-light" id="Rss">
+            <i class="icon icon-lg icon-rss"></i>
+        </a>
+    </div>
+</header>
+<header class="content-header post-header">
+    
+    
+    <div class="container fade-scale">
+        <div id="myheader">
+            <h1 class="title">
+                
+            </h1>
+            <h5 class="subtitle">
+                
+                
+            </h5>
+        </div>
+    </div>
+
+</header>
+
+  
+    <div class="container body-wrap">
+      
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="post-toc-number">1.</span> <span class="post-toc-text">简介</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#createComponent"><span class="post-toc-number">2.</span> <span class="post-toc-text">createComponent</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%9E%84%E9%80%A0%E5%AD%90%E7%B1%BB%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">构造子类构造函数</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%AE%89%E8%A3%85%E9%92%A9%E5%AD%90%E5%87%BD%E6%95%B0"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">安装钩子函数</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%AE%9E%E4%BE%8B%E5%8C%96VNode"><span class="post-toc-number">2.3.</span> <span class="post-toc-text"># 实例化VNode</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%80%BB%E7%BB%93"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">总结</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Patch"><span class="post-toc-number">3.</span> <span class="post-toc-text">Patch</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E7%BB%84%E4%BB%B6%E6%B3%A8%E5%86%8C"><span class="post-toc-number">4.</span> <span class="post-toc-text">组件注册</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%85%A8%E5%B1%80%E6%B3%A8%E5%86%8C"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">全局注册</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%B1%80%E9%83%A8%E6%B3%A8%E5%86%8C"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">局部注册</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E5%BC%82%E6%AD%A5%E7%BB%84%E4%BB%B6"><span class="post-toc-number">5.</span> <span class="post-toc-text">异步组件</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="post-toc-number">6.</span> <span class="post-toc-text">生命周期</span></a></li></ol>
+        </nav>
+    </aside>
+   
+  <article id="post-Vue-src-readding-2" class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+      <h1 class="post-card-title">
+        Vue源码阅读(2)之组件化
+      </h1>
+      <div class="post-meta">
+        <i class="icon icon-lg icon-calendar-o"></i> 发表于
+        <time class="post-time" title="2021-02-21 21:28:51" datetime="2021-02-21T13:28:51.000Z"  itemprop="datePublished">2021-02-21</time>
+
+          <br id="mybreak" />
+          
+	<i class="icon icon-lg icon-folder-o"></i>
+	分类：<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/blog/categories/%E6%8A%80%E6%9C%AF/">技术</a></li></ul>
+
+
+            <i>·</i>
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>次浏览
+</span>
+
+
+      </div>
+      <div class="post-count-custom">
+        <i class="icon icon-lg icon-comment-o"></i> 阅读本文可能花费您&nbsp;
+        <span class="post-count">5</span>&nbsp;分钟
+      </div>
+      <div class="post-content" id="post-content" itemprop="postContent">
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>组件化是Vue的一个核心思想。所谓组件化，就是把页面拆分成多个组件 (component)，每个组件依赖的 CSS、JavaScript、模板、图片等资源放在一起开发和维护。组件是资源独立的，组件在系统内部可复用，组件和组件之间可以嵌套。<a id="more"></a></p>
+<p>本文主要关注Vue如何创建组件。</p>
+<h2 id="createComponent"><a href="#createComponent" class="headerlink" title="createComponent"></a>createComponent</h2><p>在上一篇文章中介绍过<code>vm._render</code>方法，作用是根据<code>render</code>函数生成VDOM，生成VDOM主要是由<code>vm_render</code>方法中的<code>createElement</code>中的<code>_createElement</code>方法实现的。</p>
+<p><code>_createElement</code>中有一段逻辑是对参数 <code>tag</code> 的判断，如果是一个普通的 html 标签，如div，则会实例化一个普通 VNode 节点，否则通过 <code>createComponent</code> 方法创建一个组件 VNode。</p>
+<p><code>createComponent</code>有三个核心步骤：</p>
+<ol>
+<li>构造子类构造函数</li>
+<li>安装组件钩子函数</li>
+<li>实例化 VNode</li>
+</ol>
+<p>下面我会分别介绍这三个步骤。</p>
+<h3 id="构造子类构造函数"><a href="#构造子类构造函数" class="headerlink" title="构造子类构造函数"></a>构造子类构造函数</h3><figure class="highlight javascript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> baseCtor = context.$options._base</span><br><span class="line"></span><br><span class="line"><span class="comment">// plain options object: turn it into a constructor</span></span><br><span class="line"><span class="keyword">if</span> (isObject(Ctor)) {</span><br><span class="line">  Ctor = baseCtor.extend(Ctor)</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>这里 <code>baseCtor</code> 实际上就是 Vue，这个的定义是在最开始初始化 Vue 的阶段，在 <code>src/core/global-api/index.js</code> 中的 <code>initGlobalAPI</code> 函数有这么一段逻辑：</p>
+<figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// this is used to identify the "base" constructor to extend all plain-object</span></span><br><span class="line"><span class="comment">// components with in Weex's multi-instance scenarios.</span></span><br><span class="line">Vue.options._base = Vue</span><br></pre></td></tr></tbody></table></figure>
+<p>我们可以注意到<code>context.$options._base</code>和<code>Vue.options._base</code>，前者是实例中取出<code>_base</code>，后者是构造函数中取出<code>_base</code>,那么为什么这两个地方都能取出<code>_base</code>呢？</p>
+<p>实际上在 <code>src/core/instance/init.js</code> 里 Vue 原型上的 <code>_init</code> 函数中有这么一段逻辑：</p>
+<figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vm.$options = mergeOptions(</span><br><span class="line">  resolveConstructorOptions(vm.constructor),</span><br><span class="line">  options || {},</span><br><span class="line">  vm</span><br><span class="line">)</span><br></pre></td></tr></tbody></table></figure>
+<p>这样就把 Vue 上的一些 <code>option</code> 扩展到了 vm.$options 上，意思是vm(组件)的<code>options</code>中包含了Vue的<code>options</code>和用户传入的<code>options</code>。</p>
+<p>回到<code>Ctor = baseCtor.extend(Ctor)</code>，这里Ctor是Vue的子类，继承了Vue的属性和方法，extend返回的是一个叫<code>Sub</code>的组件构造函数。当我们去实例化<code>Sub</code>时，就会执行 <code>this._init</code> 逻辑再次走到了 <code>Vue</code> 实例的初始化逻辑，这意味着组件的实例化和Vue的实例化相类似。</p>
+<h3 id="安装钩子函数"><a href="#安装钩子函数" class="headerlink" title="安装钩子函数"></a>安装钩子函数</h3><figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// install component management hooks onto the placeholder node</span></span><br><span class="line">installComponentHooks(data)</span><br></pre></td></tr></tbody></table></figure>
+<p>整个 <code>installComponentHooks</code> 的过程就是把 <code>componentVNodeHooks</code> 的钩子函数合并到 <code>data.hook</code> 中，在 VNode 执行 <code>patch</code> 的过程中执行相关的钩子函数。</p>
+<p>简单地说是把生成VNode的方法都准备好，准备生成Vnode。</p>
+<h3 id="实例化VNode"><a href="#实例化VNode" class="headerlink" title="# 实例化VNode"></a># 实例化VNode</h3><figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> name = Ctor.options.name || tag</span><br><span class="line"><span class="keyword">const</span> vnode = <span class="keyword">new</span> VNode(</span><br><span class="line">  <span class="string">`vue-component-<span class="subst">${Ctor.cid}</span><span class="subst">${name ? <span class="string">`-<span class="subst">${name}</span>`</span> : <span class="string">''</span>}</span>`</span>,</span><br><span class="line">  data, <span class="literal">undefined</span>, <span class="literal">undefined</span>, <span class="literal">undefined</span>, context,</span><br><span class="line">  { Ctor, propsData, listeners, tag, children },</span><br><span class="line">  asyncFactory</span><br><span class="line">)</span><br><span class="line"><span class="keyword">return</span> vnode</span><br></pre></td></tr></tbody></table></figure>
+<p>最后一步非常简单，通过 <code>new VNode</code> 实例化一个 <code>vnode</code> 并返回。需要注意的是和普通元素节点的 <code>vnode</code> 不同，组件的 <code>vnode</code> 是没有 <code>children</code> 的，这点很关键，在之后的 <code>patch</code> 过程中我们会再提。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>创建一个组件经历了三个步骤：</p>
+<ol>
+<li>创建组件的构造函数</li>
+<li>执行构造函数，准备好生成Vnode的相关方法。</li>
+<li>生成Vnode。</li>
+</ol>
+<p>下图是组件创建过程的函数调用栈，通过调用栈我们也能更好地了解组件的创建过程。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="C:\Users\Jrrr\Desktop\Chrome" alt="组件创建过程" title="Download组件创建过程.png">
+                </div>
+                <div class="image-caption">Download组件创建过程.png</div>
+            </figure>
+
+<p>由下往上看，跟着函数调用栈的顺序，可以看出整个过程是</p>
+<ul>
+<li><p>执行 new Vue，然后初始化 vm 实例，扩展原型方法</p>
+</li>
+<li><p>执行 mount 函数去解析编译 template 模板</p>
+</li>
+<li><p>执行 Watcher render 去生成 VNode tree</p>
+</li>
+<li><p>执行 update 中的 patch 去生成 DOM，如遇到组件</p>
+</li>
+<li><ul>
+<li>初始化 Sub 构造器</li>
+<li>执行 new Sub，初始化组件 vm 实例，扩展原型方法</li>
+<li>执行 mount 函数解析编译组件模板，生成组件 VNode tree，最终返回组件 DOM</li>
+<li>如再遇组件，则继续递归</li>
+</ul>
+</li>
+</ul>
+<p>可以看出 Vue 的组件生成顺序是由子到父的。</p>
+<h2 id="Patch"><a href="#Patch" class="headerlink" title="Patch"></a>Patch</h2><p>既然有了VNode，下一步应该是调用<code>vm._update</code>来创建真实DOM，这个过程就是patch。</p>
+<p>具体的过程就不细说，这里主要注意一个组件中可能又包含另外的组件。如果组件 <code>patch</code> 过程中又创建了子组件，那么DOM 的插入顺序是先子后父。</p>
+<h2 id="组件注册"><a href="#组件注册" class="headerlink" title="组件注册"></a>组件注册</h2><h3 id="全局注册"><a href="#全局注册" class="headerlink" title="全局注册"></a>全局注册</h3><p>相当于在<code>Vue.options.components</code>注册了一个组件。因为局部组件都会通过<code>Vue.extend</code>创建一个<code>Sub</code>子类(前面介绍过)，而<code>Sub</code>会继承<code>Vue.options.components</code>，这里是通过<code>mergeOptions</code>实现的，前面也简单提到过。</p>
+<p>到这里，局部组件就能通过<code>options</code>拿到全局组件。</p>
+<h3 id="局部注册"><a href="#局部注册" class="headerlink" title="局部注册"></a>局部注册</h3><p>Vue.js 也同样支持局部注册，我们可以在一个组件内部使用 <code>components</code> 选项做组件的局部注册，例如：</p>
+<figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> HelloWorld <span class="keyword">from</span> <span class="string">'./components/HelloWorld'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> {</span><br><span class="line">  components: {</span><br><span class="line">    HelloWorld</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>其实理解了全局注册的过程，局部注册是非常简单的。在组件的 Vue 的实例化阶段有一个合并 <code>option</code> 的逻辑，之前我们也分析过，所以就把 <code>components</code> 合并到 <code>vm.$options.components</code> 上，这样我们就可以在 <code>resolveAsset</code> 的时候拿到这个组件的构造函数，并作为 <code>createComponent</code> 的钩子的参数。</p>
+<p>注意，局部注册和全局注册不同的是，只有该类型的组件才可以访问局部注册的子组件，而全局注册是扩展到 <code>Vue.options</code> 下，所以在所有组件创建的过程中，都会从全局的 <code>Vue.options.components</code> 扩展到当前组件的 <code>vm.$options.components</code> 下，这就是全局注册的组件能被任意使用的原因。</p>
+<h2 id="异步组件"><a href="#异步组件" class="headerlink" title="异步组件"></a>异步组件</h2><p>因为我在实战中并没有用过异步组件，这里就先留个坑，只是简单的了解一下异步组件的作用。</p>
+<p>在我们平时的开发工作中，为了减少首屏代码体积，往往会把一些非首屏的组件设计成异步组件，按需加载。Vue 也原生支持了异步组件的能力，如下：</p>
+<figure class="highlight js"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Vue.component(<span class="string">'async-example'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>{</span><br><span class="line">   <span class="comment">// 这个特殊的 require 语法告诉 webpack</span></span><br><span class="line">   <span class="comment">// 自动将编译后的代码分割成不同的块，</span></span><br><span class="line">   <span class="comment">// 这些块将通过 Ajax 请求自动下载。</span></span><br><span class="line">   <span class="built_in">require</span>([<span class="string">'./my-async-component'</span>], resolve)</span><br><span class="line">})</span><br></pre></td></tr></tbody></table></figure>
+
+
+<h2 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h2><p>生命周期是一个很重要的知识点，我要单独开一篇文章来讲。</p>
+
+      </div>
+
+      <blockquote class="post-copyright">
+  <div class="content">
+    
+<span class="post-time">
+    最后更新：<time datetime="2021-02-21T13:33:02.563Z" itemprop="dateUpdated">2021-02-21 21:33:02</time>
+</span>
+
+
+  </div>
+  <footer>
+    <div onclick="location.href='https://jrr997.github.io/blog'">
+      <img src="/blog/img/mypic.jpg" alt="Zack Chang">
+      <a>
+        Zack Chang
+      </a>
+    </div>
+  </footer>
+</blockquote>
+
+        
+
+
+          <div class="post-footer">
+            
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Vue/" rel="tag">Vue</a></li></ul>
+
+
+              
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://jrr997.github.io/blog/2021/02/21/Vue-src-readding-2/&title=《Vue源码阅读(2)之组件化》 — Blog&pic=https://jrr997.github.io/blog/img/mypic.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://jrr997.github.io/blog/2021/02/21/Vue-src-readding-2/&title=《Vue源码阅读(2)之组件化》 — Blog&source=简介组件化是Vue的一个核心思想。所谓组件化，就是把页面拆分成多个组件 (component)，每个组件依赖的 CSS、JavaScript、模板、图片等..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://jrr997.github.io/blog/2021/02/21/Vue-src-readding-2/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Vue源码阅读(2)之组件化》 — Blog&url=https://jrr997.github.io/blog/2021/02/21/Vue-src-readding-2/&via=https://jrr997.github.io/blog" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://jrr997.github.io/blog/2021/02/21/Vue-src-readding-2/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+          </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/blog/2021/02/20/vue-src-readding-1/" id="post-next" class="post-nav-link">
+        <h4 class="title" data-hover="下一篇：Vue源码阅读(1)之数据驱动">下一篇：Vue源码阅读(1)之数据驱动</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+      
+    
+
+    
+
+    
+
+
+  </article>
+
+    </div>
+
+        <footer class="footer">
+  <div class="footer-content">
+    <!-- <span class="power">
+            <i class="icon icon-lg icon-copyright"></i>
+            2017
+            <i class="icon icon-lg icon-heart"></i>
+            <a href="https://jrr997.github.io/blog">tomotoes.com</a>
+            <br/>
+            Power by
+            <a href="https://hexo.io/" target="_blank" rel="external nofollow">Hexo</a>&nbsp;·&nbsp;
+            Theme
+            <a class="tomotoeslink" href="https://github.com/tomotoes/hexo-theme-tomotoes/" target="_blank" rel="external nofollow">tomotoes</a>
+        </span> -->
+
+    <br/>
+
+    <span id="RunTime" style="color:#a7a7a2;"></span>
+    <br/>
+
+    <span>
+            
+	<i class="icon icon-lg icon-user">
+<span id="busuanzi_container_site_uv" style='display:none'>
+       访问用户：<span id="busuanzi_value_site_uv"></span>
+    </span>人</i>
+    ·
+    <i class="icon icon-lg icon-eye">
+    <span id="busuanzi_container_site_pv" style='display:none'>
+      访问次数：<span id="busuanzi_value_site_pv"></span>
+    </span>次
+    </i>
+
+
+        </span>
+    <br/>
+
+    <span class="license"><a  target="_blank" rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">博客内容遵循 知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+  </div>
+</footer>
+
+    </main>
+    
+        
+
+    
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://jrr997.github.io/blog/2021/02/21/Vue-src-readding-2/&title=《Vue源码阅读(2)之组件化》 — Blog&pic=https://jrr997.github.io/blog/img/mypic.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://jrr997.github.io/blog/2021/02/21/Vue-src-readding-2/&title=《Vue源码阅读(2)之组件化》 — Blog&source=简介组件化是Vue的一个核心思想。所谓组件化，就是把页面拆分成多个组件 (component)，每个组件依赖的 CSS、JavaScript、模板、图片等..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://jrr997.github.io/blog/2021/02/21/Vue-src-readding-2/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Vue源码阅读(2)之组件化》 — Blog&url=https://jrr997.github.io/blog/2021/02/21/Vue-src-readding-2/&via=https://jrr997.github.io/blog" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://jrr997.github.io/blog/2021/02/21/Vue-src-readding-2/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p class="wechatshare">扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACIUlEQVR42u3a0WrDMAwF0P7/T3evg5HkSkoGsY+fRtrYPh0IW9LnE4/vn/H7+fk3z79ztNbniYGBgfFaxvd0HC18jpnAjtY9nwEDA2MHxnngSzaagJMnyboYGBgYyXS9zV0ETQwMDIwHAu7kyJiHbwwMDIz8EjtJjSXgf7qLY2BgvJAxCYJP//1IfQMDA+NVjG9xJGXLZIt54TPaFQYGxtKMPMBNmi0mUTE/aGJgYKzKyBebJNry8mf+JNoKBgbGQozeAS5nz0PwxQ4xMDC2YfSC3V2ptFFbGAYGxgaMcoA7Xb4aXvML8+GnGBgYSzN6W6lehifX13w2DAyMVRm9Y1+1mWxe2rzYIQYGxtKM/CiWR7lqeTJf/YKNgYGxNOOunFV+6Kx+moAxMDBWZVTT9L3t5u/e0GyBgYGxJWPOyxssekUIDAyMtRnJa70msN6hs5pow8DA2IGRT9FrqqheaJutGBgYGEszqgn9vIXirpRc+ZKMgYGxKKPX/tVrjMgLD+UWEAwMjA0YvWNcsonez5RfpzEwMPZhVEuJ1a2fh+xJyRMDA2Ntxvzi2jveVQsJhf8DBgbGcox8VNNteTmhF9arzWcYGBhvZ+StWtX0WS9oVgM9BgbGPoy7jn15iKwWOy/ewsDAwGgF33lRsxCsMTAwMAZFgmp5Mnn3hoCLgYHxQkY1/OXlz94R8MF0GwYGxgsZveny9H0SsicYDAyMpRk/X0eTYd1LvnEAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <!-- waves按钮特效 -->
+<script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+
+<!-- 主题配置脚本 -->
+<script>
+var BLOG = { ROOT: '/blog/', SHARE: true, REWARD: false };
+</script>
+
+<!-- jquery -->
+<script src="/blog/js/jquery.min.js?v=3.0"></script>
+
+<!-- 搜索 -->
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item waves-block waves-effect" onclick="location.href='{path}'">
+    <div class="title ellipsis" title="{title}">{title}</div>
+</li>
+</template>
+
+
+<!-- main博客脚本 -->
+<script src="/blog/js/main.min.js?v=3.0" ></script>
+
+<!-- 动画&配置 -->
+<script src="/blog/js/script.min.js?v=3.0" ></script>
+
+<!-- 脚本管理 -->
+<script>
+
+if(window.innerWidth > 800){
+	/* 3D标题 */
+	$(".content-header").on("mousemove", threedee);
+
+	/* 底部追随鼠标 */
+	$(".footer").hover(2);
+
+	/* gotop键的涟漪 */
+	$("#gotop").hover(1);
+
+	/* 赞赏的粒子雨 */
+	$("#reward").hover(3);
+
+	/* 微信公众号的底部渲染 */
+	$("#wechat").hover(4);
+
+    /* 标题跳动 */
+    $(".archivestitle").bumpyText();
+
+	/* 图片点击放大 */
+	const postimg = jQuery(".post-content img:not(.github-emoji)");
+	postimg.on("click",function(){
+
+		mask.classList.add("in");
+		main.classList.add("Mask");
+		menu.classList.add("Mask");
+		var myimg = this.cloneNode(true);
+		myimg.classList.add("imgShow");
+
+		setTimeout(function(){
+			jQuery(myimg).animate({
+				opacity:"1"
+			},1000);
+		},0);
+
+		document.body.appendChild(myimg);
+
+		myimg.onclick=function(){
+			document.body.removeChild(myimg);
+			mask.classList.remove("in");
+			main.classList.remove("Mask");
+			menu.classList.remove("Mask");
+		};
+
+	});
+
+}
+
+/* 名字跳动 */
+$("#name").bumpyText();
+
+
+/* 网站运行时间 */
+setInterval(function () {
+	setTime("2021/2/17");
+}, 1000);
+
+/* 文章块的淡出 */
+postshow();
+
+/* 座右铭 */
+
+   getHitokoto();
+
+
+
+/* 粘贴提示 */
+G($(".post-content"), location.href, "Zack Chang");
+
+
+/* 控制台 */
+if (window.console && window.console.log) {
+	setTimeout(function () {
+		console.log("\n %c 一个坏掉的番茄 %c  © Simon Ma  http://tomotoes.com \n\n", "color:#FFFFFB;background:#1abc9c;padding:5px 0;border-radius:.5rem 0 0 .5rem;", "color:#FFFFFB;background:#080808;padding:5px 0;border-radius:0 .5rem .5rem 0;");
+	}, 0);
+}
+
+</script>
+
+
+
+
+<!-- 公式渲染 -->
+
+
+
+<!-- 不蒜子 -->
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+</body>
+</html>
