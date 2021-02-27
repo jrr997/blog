@@ -3291,7 +3291,7 @@ hr,
   position: relative;
   overflow-x: auto;
   padding: 0px 20px 10px 20px;
-  background: #f6f6f6;
+  background: rgba(251, 235, 212);
   color: #4d4d4c;
 }
 .post-content pre code {
@@ -3302,16 +3302,17 @@ hr,
   position: relative;
   overflow-x: auto;
   padding: 0px 20px 10px 20px;
-  background: #f6f6f6;
+  background: rgba(251, 235, 212);
 }
 .post-content .highlight pre {
   margin: 0;
   padding: 0;
+  background-color: rgba(251, 235, 212);
 }
 .post-content .highlight .line {
-  font-size: 17px;
-  line-height: 27.2px;
-  height: 27.2px;
+  font-size: 10px;
+  line-height: 16px;
+  height: 16px;
 }
 .post-content .highlight table {
   margin: 0;
@@ -3336,13 +3337,16 @@ hr,
   float: right;
 }
 .post-content .highlight .gutter pre {
+  display: none;
   color: #000;
   font-size: 0.85em;
   text-align: right;
   padding-right: 20px;
+  font-size: 10px;
 }
 .post-content .highlight .gutter pre .line {
-  line-height: 1.9;
+  line-height: 1em;
+  font-size: 10px;
 }
 .post-content .gist {
   background: #f6f6f6;
@@ -3353,7 +3357,7 @@ hr,
 }
 .post-content .gist .gist-file {
   border: none;
-  font-family: "Source Code Pro", Consolas, Monaco, courier, monospace;
+  font-family: "Source Code Pro";
 }
 .post-content .gist .gist-file .highlight {
   margin: 0;
@@ -3376,7 +3380,7 @@ hr,
 .post-content .gist .gist-meta {
   background: #f6f6f6;
   color: #8e908c;
-  font: 0.85em "Source Code Pro", Consolas, Monaco, courier, monospace;
+  font: 0.85em "Source Code Pro";
 }
 .post-content .gist .gist-meta a {
   color: #6389b9;
@@ -4544,7 +4548,7 @@ pre .javascript .function {
 .post-content kbd,
 .post-content pre,
 .post-content samp {
-  font-family: "Source Code Pro", Consolas, Monaco, courier, monospace;
+  font-family: "Source Code Pro";
 }
 .post-content code,
 .post-content pre {
