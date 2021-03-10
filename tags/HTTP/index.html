@@ -8,6 +8,8 @@
           
             <title>
               
+                标签: HTTP |
+                  
                     Blog
                        |
                         Blog
@@ -48,7 +50,7 @@
                         <meta name="description" content="Author:Zack Chang,Category:Personal Blog">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Blog">
-<meta property="og:url" content="https://jrr997.github.io/blog/index.html">
+<meta property="og:url" content="https://jrr997.github.io/blog/tags/HTTP/index.html">
 <meta property="og:site_name" content="Blog">
 <meta property="og:description" content="Author:Zack Chang,Category:Personal Blog">
 <meta property="og:locale" content="zh_CN">
@@ -154,7 +156,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">Blog</div>
+        <div class="flex-col header-title ellipsis">标签: HTTP</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -171,19 +173,29 @@
         </a>
     </div>
 </header>
-<header class="content-header index-header">
+<header class="content-header tags-header">
     
     
     <div class="container fade-scale">
         <div id="myheader">
             <h1 class="title">
-                 
-                    Blog
                 
             </h1>
             <h5 class="subtitle">
                 
-                    得就得，唔得翻顺德
+                    <h1 id="pagetitle" class="archivestitle"></h1>
+                    <script>
+                        if(location.href.indexOf('about')!=-1){
+                            pagetitle.textContent = '一个准前端工程师';
+                        }else if(location.href.indexOf('tags')!=-1||location.href.indexOf('categories')!=-1){
+                            var a=location.href.substring(location.href.length-5,location.href.length-1);
+                            if(a==='tags'){
+                                pagetitle.textContent = '不积小流无以成江海';
+                            }else if(a==='ries'){
+                                pagetitle.textContent = '不积跬步无以至千里';
+                            }
+                        }
+                    </script>
                 
             </h5>
         </div>
@@ -191,14 +203,30 @@
 
 </header>
 
-<div class="container body-wrap">
-    <ul class="post-list">
-    
-        <li class="post-list-item fade">
-            <article id="post-HTTP1-0"
-  class="article-card article-type-post" itemprop="blogPost">
 
-    
+    <div class="container body-wrap fade">
+        
+            
+            
+            <h5 class="tag-tip">
+                <i class="icon icon-tag"></i>
+                关于
+                <span style="color:rgb(100, 100, 100)">HTTP</span>
+                共1篇文章
+            </h5>
+            <div class="waterfall">
+            
+                <article class="archive-article" onclick="location.href='/blog/2021/03/10/HTTP1-0/'">
+    <div class="archive-article-date">
+      
+      <time class="my-post-time">
+        <i class="icon icon-lg icon-file-text-o"></i>
+        &nbsp;
+          2021-03-10
+      </time>
+    </div>
+    <div class="archive-article-inner">
+      
 
 
   
@@ -209,296 +237,15 @@
 
 
 
-
-     <div class="post-meta">
-        <time class="post-time" title="2021-03-10 19:50:19" datetime="2021-03-10T11:50:19.000Z"  itemprop="datePublished">2021-03-10</time>
-
-    </div>
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        <h5 id="文章摘要：了解HTTP1-1的新特性"><a href="#文章摘要：了解HTTP1-1的新特性" class="headerlink" title="文章摘要：了解HTTP1.1的新特性"></a>文章摘要：了解HTTP1.1的新特性</h5>
-    
-        <div class="post-more-div">
-            <a href="/blog/2021/03/10/HTTP1-0/" class="post-more waves-button">
-                阅读全文 »
-            </a>
-        </div>
-    </div>
-    
-    <div class="post-footer">
-        
+      <br/>
+      
 	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/HTTP/" rel="tag">HTTP</a></li></ul>
 
     </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-vue-src-readding-4"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a href="/blog/2021/02/27/vue-src-readding-4/">Vue源码阅读(3)之AST</a>
-    </h3>
-  
-
-
-
-
-     <div class="post-meta">
-        <time class="post-time" title="2021-02-27 22:05:49" datetime="2021-02-27T14:05:49.000Z"  itemprop="datePublished">2021-02-27</time>
-
-    </div>
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        <h2 id="简介："><a href="#简介：" class="headerlink" title="简介："></a>简介：</h2><p>编译的过程就是把模板变成<code>render</code>函数.</p>
-<p>Vue.js 提供了 2 个版本，一个是 Runtime + Compiler 的，一个是 Runtime only 的，前者是包含编译代码的，可以把编译过程放在运行时做，后者是不包含编译代码的，需要借助 webpack 的 <code>vue-loader</code> 事先把模板编译成 <code>render</code>函数。</p>
-    
-        <div class="post-more-div">
-            <a href="/blog/2021/02/27/vue-src-readding-4/" class="post-more waves-button">
-                阅读全文 »
-            </a>
-        </div>
-    </div>
-    
-    <div class="post-footer">
+  </article>
+            
+            </div>
         
-	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Vue/" rel="tag">Vue</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-vue-src-readding-3"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a href="/blog/2021/02/22/vue-src-readding-3/">Vue源码阅读(3)之响应式原理</a>
-    </h3>
-  
-
-
-
-
-     <div class="post-meta">
-        <time class="post-time" title="2021-02-22 19:25:28" datetime="2021-02-22T11:25:28.000Z"  itemprop="datePublished">2021-02-22</time>
-
-    </div>
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>本篇文章属于新手向，着重点在理解Vue响应式系统中的Observer、Dep、Watcher,这是理解响应式源码的关键。因此这篇文章不会在分析源码上花很多功夫。</p>
-    
-        <div class="post-more-div">
-            <a href="/blog/2021/02/22/vue-src-readding-3/" class="post-more waves-button">
-                阅读全文 »
-            </a>
-        </div>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Vue/" rel="tag">Vue</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-Vue-src-readding-2"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a href="/blog/2021/02/21/Vue-src-readding-2/">Vue源码阅读(2)之组件化</a>
-    </h3>
-  
-
-
-
-
-     <div class="post-meta">
-        <time class="post-time" title="2021-02-21 21:28:51" datetime="2021-02-21T13:28:51.000Z"  itemprop="datePublished">2021-02-21</time>
-
-    </div>
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>组件化是Vue的一个核心思想。所谓组件化，就是把页面拆分成多个组件 (component)，每个组件依赖的 CSS、JavaScript、模板、图片等资源放在一起开发和维护。组件是资源独立的，组件在系统内部可复用，组件和组件之间可以嵌套。</p>
-    
-        <div class="post-more-div">
-            <a href="/blog/2021/02/21/Vue-src-readding-2/" class="post-more waves-button">
-                阅读全文 »
-            </a>
-        </div>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Vue/" rel="tag">Vue</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-vue-src-readding-1"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a href="/blog/2021/02/20/vue-src-readding-1/">Vue源码阅读(1)之数据驱动</a>
-    </h3>
-  
-
-
-
-
-     <div class="post-meta">
-        <time class="post-time" title="2021-02-20 23:58:19" datetime="2021-02-20T15:58:19.000Z"  itemprop="datePublished">2021-02-20</time>
-
-    </div>
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        <h5 id="文章摘要：通过阅读Vue源码来深入学习Vue，本文章主要介绍Vue的数据驱动部分源码。"><a href="#文章摘要：通过阅读Vue源码来深入学习Vue，本文章主要介绍Vue的数据驱动部分源码。" class="headerlink" title="文章摘要：通过阅读Vue源码来深入学习Vue，本文章主要介绍Vue的数据驱动部分源码。"></a>文章摘要：通过阅读Vue源码来深入学习Vue，本文章主要介绍Vue的数据驱动部分源码。</h5>
-    
-        <div class="post-more-div">
-            <a href="/blog/2021/02/20/vue-src-readding-1/" class="post-more waves-button">
-                阅读全文 »
-            </a>
-        </div>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Vue/" rel="tag">Vue</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-test"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a href="/blog/2021/02/18/test/">这是一段很长很长很长很长很长很长很长很长很长很长的文字，用来测试一下标题</a>
-    </h3>
-  
-
-
-
-
-     <div class="post-meta">
-        <time class="post-time" title="2021-02-18 00:26:21" datetime="2021-02-17T16:26:21.000Z"  itemprop="datePublished">2021-02-18</time>
-
-    </div>
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        <h5 id="测试。"><a href="#测试。" class="headerlink" title="测试。"></a>测试。</h5>
-    
-        <div class="post-more-div">
-            <a href="/blog/2021/02/18/test/" class="post-more waves-button">
-                阅读全文 »
-            </a>
-        </div>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/%E5%8D%9A%E5%AE%A2/" rel="tag">博客</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-My-New-Post"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a href="/blog/2021/02/17/My-New-Post/">记录博客建站完成</a>
-    </h3>
-  
-
-
-
-
-     <div class="post-meta">
-        <time class="post-time" title="2021-02-17 18:43:02" datetime="2021-02-17T10:43:02.000Z"  itemprop="datePublished">2021-02-17</time>
-
-    </div>
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        <h5 id="文章摘要：记录博客建立完成及过程中遇到的坑"><a href="#文章摘要：记录博客建立完成及过程中遇到的坑" class="headerlink" title="文章摘要：记录博客建立完成及过程中遇到的坑"></a>文章摘要：记录博客建立完成及过程中遇到的坑</h5>
-    
-        <div class="post-more-div">
-            <a href="/blog/2021/02/17/My-New-Post/" class="post-more waves-button">
-                阅读全文 »
-            </a>
-        </div>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/%E5%8D%9A%E5%AE%A2/" rel="tag">博客</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-    </ul>
-
-    
 
 </div>
 
