@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Language" content="zh-cn">
+  <meta charset="utf-8">
+  
+      
+          
+            <title>
+              
+                JS经典面试题Foo().getname() |
+                  
+                    Blog
+                       |
+                        Blog
+                          
+            </title>
+            <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+            
+              <meta name="theme-color" content="#77AAFF">
+              
+                
+                  <meta name="keywords" content="面试">
+
+                  
+
+                    
+
+                      <!-- Baidu Push -->
+<script>
+	(function(){
+		var bp = document.createElement('script');
+		var curProtocol = window.location.protocol.split(':')[0];
+		if (curProtocol === 'https') {
+			bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+		}
+		else {
+			bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		}
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(bp, s);
+	})();
+
+	var _hmt = _hmt || [];
+</script>
+
+
+
+
+                        <meta name="description" content="文章摘要：解读new Foo().getname()">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JS经典面试题Foo().getname()">
+<meta property="og:url" content="https://jrr997.github.io/blog/2021/03/21/%E9%9D%A2%E8%AF%95%E9%A2%981/index.html">
+<meta property="og:site_name" content="Blog">
+<meta property="og:description" content="文章摘要：解读new Foo().getname()">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-03-21T15:05:42.000Z">
+<meta property="article:modified_time" content="2021-03-21T15:07:43.520Z">
+<meta property="article:author" content="Zack Chang">
+<meta property="article:tag" content="面试">
+<meta name="twitter:card" content="summary">
+                          
+                            <link rel="alternate" type="application/atom+xml" title="Blog" href="/blog/atom.xml">
+                            
+                              <link rel="shortcut icon" href="/blog/img/favicon.ico">
+                                <link id="style" rel="stylesheet" href="/blog/css/style.css?v=3.0">
+                                <script>
+                                  window.lazyScripts = []
+                                </script>
+
+                                <!-- custom head -->
+                                
+
+<meta name="generator" content="Hexo 5.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+    <aside id="menu" class="hide"
+   >
+    <div class="inner flex-row-vertical">
+      <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+      </a>
+      <div class="brand-wrap">
+        <div class="brand">
+          <a href="/blog/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/blog/img/mypic.jpg" alt="avatar">
+        </a>
+          <hgroup class="introduce">
+            <h5 class="nickname" id="name">
+              Zack Chang
+            </h5>
+            
+                <div id="yiyanmotto" class="motto">&nbsp;</div>
+                
+          </hgroup>
+        </div>
+      </div>
+      <div class="scroll-wrap flex-col">
+        <ul class="nav">
+          
+            <li class="waves-block waves-effect active">
+              <a href="/blog/"  >
+                    <i class="icon icon-lg icon-home"></i>
+                    <span>主 页</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+            </li>
+            
+            <li class="waves-block waves-effect active">
+              <a href="/blog/categories"  >
+                    <i class="icon icon-lg icon-th-list"></i>
+                    <span>分 类</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+            </li>
+            
+            <li class="waves-block waves-effect active">
+              <a href="/blog/tags"  >
+                    <i class="icon icon-lg icon-tags"></i>
+                    <span>标 签</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+            </li>
+            
+            <li class="waves-block waves-effect active">
+              <a href="/blog/about"  >
+                    <i class="icon icon-lg icon-smile-o"></i>
+                    <span>关 于</span><i class="icon icon-lg icon-caret-left"></i>
+                  </a>
+            </li>
+            
+              <div class="nav2">
+                
+                  <a class="nav2item" data-title="Email" href="mailto:997571692@qq.com" target="_parent"title="Email" >
+                <i class="icon icon-lg icon-envelope-o envelope-o"></i>
+              </a>
+                  
+                  <a class="nav2item" data-title="Github" href="https://github.com/jrr997" target="_blank"title="Github" >
+                <i class="icon icon-lg icon-github github"></i>
+              </a>
+                  
+                  <a class="nav2item" data-title="微博" href="/blog/null" target="_blank"title="微博" >
+                <i class="icon icon-lg icon-weibo weibo"></i>
+              </a>
+                  
+
+              </div>
+
+        </ul>
+
+      </div>
+    </div>
+
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">JS经典面试题Foo().getname()</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        <a href="../../atom.xml" target="_blank" class="header-icon waves-effect waves-circle waves-light" id="Rss">
+            <i class="icon icon-lg icon-rss"></i>
+        </a>
+    </div>
+</header>
+<header class="content-header post-header">
+    
+    
+    <div class="container fade-scale">
+        <div id="myheader">
+            <h1 class="title">
+                
+            </h1>
+            <h5 class="subtitle">
+                
+                
+            </h5>
+        </div>
+    </div>
+
+</header>
+
+  
+    <div class="container body-wrap">
+      
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#%E6%96%87%E7%AB%A0%E6%91%98%E8%A6%81%EF%BC%9A%E8%A7%A3%E8%AF%BBnew-Foo-getname"><span class="post-toc-number">1.</span> <span class="post-toc-text">文章摘要：解读new Foo().getname()</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#JS%E7%BB%8F%E5%85%B8%E9%9D%A2%E8%AF%95%E9%A2%98Foo-getname"><span class="post-toc-number"></span> <span class="post-toc-text">JS经典面试题Foo().getname()</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#new-Foo-getName"><span class="post-toc-number"></span> <span class="post-toc-text">new Foo.getName();</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#new-Foo-getName-1"><span class="post-toc-number"></span> <span class="post-toc-text">new Foo().getName();</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#new-new-Foo-getName"><span class="post-toc-number"></span> <span class="post-toc-text">new new Foo().getName();</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E8%A7%A3%E6%83%91%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E7%AC%AC5%E9%A2%98%E5%90%8Enew%EF%BC%8C%E7%AC%AC6%E9%A2%98%E5%85%88new"><span class="post-toc-number"></span> <span class="post-toc-text">解惑：为什么第5题后new，第6题先new</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%86%8D%E6%9D%A5%E5%88%86%E6%9E%90%E7%AC%AC6%E9%A2%98%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E5%85%88new%EF%BC%9F"><span class="post-toc-number"></span> <span class="post-toc-text">再来分析第6题，为什么先new？</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%80%BB%E7%BB%93"><span class="post-toc-number"></span> <span class="post-toc-text">总结</span></a>
+        </nav>
+    </aside>
+   
+  <article id="post-面试题1" class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+      <h1 class="post-card-title">
+        JS经典面试题Foo().getname()
+      </h1>
+      <div class="post-meta">
+        <i class="icon icon-lg icon-calendar-o"></i> 发表于
+        <time class="post-time" title="2021-03-21 23:05:42" datetime="2021-03-21T15:05:42.000Z"  itemprop="datePublished">2021-03-21</time>
+
+          <br id="mybreak" />
+          
+	<i class="icon icon-lg icon-folder-o"></i>
+	分类：<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/blog/categories/%E5%9F%BA%E7%A1%80/">基础</a></li></ul>
+
+
+            <i>·</i>
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>次浏览
+</span>
+
+
+      </div>
+      <div class="post-count-custom">
+        <i class="icon icon-lg icon-comment-o"></i> 阅读本文可能花费您&nbsp;
+        <span class="post-count">4</span>&nbsp;分钟
+      </div>
+      <div class="post-content" id="post-content" itemprop="postContent">
+        <h5 id="文章摘要：解读new-Foo-getname"><a href="#文章摘要：解读new-Foo-getname" class="headerlink" title="文章摘要：解读new Foo().getname()"></a>文章摘要：解读new Foo().getname()<a id="more"></a></h5><h1 id="JS经典面试题Foo-getname"><a href="#JS经典面试题Foo-getname" class="headerlink" title="JS经典面试题Foo().getname()"></a>JS经典面试题Foo().getname()</h1><p>题目如下：</p>
+<figure class="highlight javascript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Foo</span>(<span class="params"></span>) </span>{</span><br><span class="line">    getName = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="number">1</span>);</span><br><span class="line">    };</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>;</span><br><span class="line">};</span><br><span class="line">Foo.getName = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">2</span>);</span><br><span class="line">};</span><br><span class="line">Foo.prototype.getName = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">3</span>);</span><br><span class="line">};</span><br><span class="line"><span class="keyword">var</span> getName = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">4</span>);</span><br><span class="line">};</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getName</span>(<span class="params"></span>) </span>{</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">5</span>);</span><br><span class="line">};</span><br><span class="line"></span><br><span class="line">Foo.getName(); </span><br><span class="line">getName(); </span><br><span class="line">Foo().getName(); </span><br><span class="line">getName(); </span><br><span class="line"><span class="keyword">new</span> Foo.getName();</span><br><span class="line"><span class="keyword">new</span> Foo().getName();</span><br><span class="line"><span class="keyword">new</span> <span class="keyword">new</span> Foo().getName();</span><br></pre></td></tr></tbody></table></figure>
+
+
+<p>输出看结果：</p>
+<figure class="highlight javascript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Foo.getName(); <span class="comment">//2</span></span><br><span class="line">getName(); <span class="comment">//4</span></span><br><span class="line">Foo().getName(); <span class="comment">//1</span></span><br><span class="line">getName(); <span class="comment">//1</span></span><br><span class="line"><span class="keyword">new</span> Foo.getName(); <span class="comment">//2</span></span><br><span class="line"><span class="keyword">new</span> Foo().getName(); <span class="comment">//3</span></span><br><span class="line"><span class="keyword">new</span> <span class="keyword">new</span> Foo().getName(); <span class="comment">//3</span></span><br></pre></td></tr></tbody></table></figure>
+
+
+<p>其中最难理解的是有关new的最后三道题(5、6、7题)，因此先从这三道题说起。</p>
+<p>这三道题考的是运算符优先级，先来看三道题是如何执行的。</p>
+<h4 id="new-Foo-getName"><a href="#new-Foo-getName" class="headerlink" title="new Foo.getName();"></a>new Foo.getName();</h4><p><code>new (Foo.getName)()</code>:先获取<code>function Foo.getName</code>，再<code>new</code>这个<code>function</code>，因此输出2</p>
+<h4 id="new-Foo-getName-1"><a href="#new-Foo-getName-1" class="headerlink" title="new Foo().getName();"></a>new Foo().getName();</h4><p>先<code>new Foo()</code>得到一个实例对象，然后执行实例中的<code>getName()</code>方法，因为实例中没有这个方法，但原型上有，因此执行的是<code>Foo.prototype.getName</code>，输出3</p>
+<p><strong>与上一题相比较的话就产生一个疑惑，为什么这个会先<code>new</code>，而上一题是后<code>new</code>，这个问题待会分析。</strong></p>
+<h4 id="new-new-Foo-getName"><a href="#new-new-Foo-getName" class="headerlink" title="new new Foo().getName();"></a>new new Foo().getName();</h4><p>如果看不懂上面两题，这一题也肯定看不懂，因此对这题先做了解就好。</p>
+<p>首先执行中间的<code>new Foo()</code>得到一个实例对象(假设为foo),再次强调<code>foo</code>是一个对象,此时变成了<code>new foo.getName()</code></p>
+<p>接着执行<code>foo.getName</code>获取到foo对象中的<code>getName</code>属性，实则就是<code>Foo.prototype.getName</code></p>
+<p>最后执行<code>new</code>，相当于<code>new Foo.prototype.getName</code>，因此输出3</p>
+<h4 id="解惑：为什么第5题后new，第6题先new"><a href="#解惑：为什么第5题后new，第6题先new" class="headerlink" title="解惑：为什么第5题后new，第6题先new"></a>解惑：为什么第5题后new，第6题先new</h4><p>这与javascript运算符优先级有关，下面简单介绍一下运算符的优先级。</p>
+<p>详细的运算符优先级表格在这里：<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Operator_Precedence%E3%80%82">https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Operator_Precedence。</a></p>
+<p>在这个题目中我们只需要关注题目出现过的运算符，有三个：函数调用<code>()</code>、成员访问<code>.</code>和<code>new</code>关键字，巧的是这三个运算符的优先级相同(优先级为20)。</p>
+<p>这里要注意一个细节，<code>new</code>(带参数列表)的优先级为20，<code>new</code>无参数列表的优先级为19，这也是判断第5和6题的关键。</p>
+<p>什么是带参数列表？简单的说就是<code>new Foo()</code>，而无参数列表是<code>new Foo</code>，没有括号，综合上面的说法，<code>new Foo</code>比函数调用<code>()</code>、成员访问<code>.</code>的优先级低。</p>
+<p>现在我们可以彻底理解第5题new Foo.getName()的执行顺序，为什么是后new？</p>
+<p>我们可以分析<code>new Foo.getName()</code>可能的执行顺序：</p>
+<ol>
+<li>先<code>new Foo</code>返回的是一个<code>foo</code>实例对象，再执行<code>foo.getName()</code>,最后输出3。<ul>
+<li>这里第一步的优先级为19，第二步为20</li>
+</ul>
+</li>
+<li>与正确答案一样，先<code>Foo.getName</code>再<code>new</code>，最后输出2。<ul>
+<li>这里第一步的优先级为20，第二步的优先级为20.</li>
+</ul>
+</li>
+</ol>
+<p>比较两种顺序的第一步，答案很明显，下面的执行顺序优先级更高。</p>
+<h4 id="再来分析第6题，为什么先new？"><a href="#再来分析第6题，为什么先new？" class="headerlink" title="再来分析第6题，为什么先new？"></a>再来分析第6题，为什么先new？</h4><p><code>new Foo().getName() </code></p>
+<p>可能的执行顺序：</p>
+<ol>
+<li>先<code>new Foo()</code>得到实例对象<code>foo</code>，再执行<code>foo.getName()</code>，输出3<ul>
+<li>第一步的优先级为20，第二步为20</li>
+</ul>
+</li>
+<li>先执行<code>Foo().getName</code>得到一个<code>Foo</code>的静态方法，再<code>new</code>这个静态方法，最后输出2<ul>
+<li>第一步的优先级是20，第二部的优先级也是20</li>
+</ul>
+</li>
+</ol>
+<p>这是什么情况？既然大家的第一步优先级都是20，那为什么第一种是正确的？</p>
+<p>这里要考虑运算符的关联性，详细可以看上面发的MDN链接。简单地说，一个运算式可能会从左到右执行，也可能从右到左执行，取决于运算符的关联性。而在这个例子中，<code>new</code>是没有关联性的，函数调用<code>()</code>、成员访问<code>.</code>的关联性是从左到右，这意味优先级相同时，<code>new Foo().getName() </code>应该从左到右执行。左边的第一个运算符是<code>new</code>，当然是先执行<code>new</code>。</p>
+<p>到目前为止，我们已经搞懂了第5题和第6题，那么最后一题相信大家思考一下都能得到答案。，而1-4题也是比较简单的题目。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>解题的思路是运算符的优先级，以及优先级相同时考虑关联性。</p>
+
+      </div>
+
+      <blockquote class="post-copyright">
+  <div class="content">
+    
+<span class="post-time">
+    最后更新：<time datetime="2021-03-21T15:07:43.520Z" itemprop="dateUpdated">2021-03-21 23:07:43</time>
+</span>
+
+
+  </div>
+  <footer>
+    <div onclick="location.href='https://jrr997.github.io/blog'">
+      <img src="/blog/img/mypic.jpg" alt="Zack Chang">
+      <a>
+        Zack Chang
+      </a>
+    </div>
+  </footer>
+</blockquote>
+
+        
+
+
+          <div class="post-footer">
+            
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/%E9%9D%A2%E8%AF%95/" rel="tag">面试</a></li></ul>
+
+
+              
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://jrr997.github.io/blog/2021/03/21/%E9%9D%A2%E8%AF%95%E9%A2%981/&title=《JS经典面试题Foo().getname()》 — Blog&pic=https://jrr997.github.io/blog/img/mypic.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://jrr997.github.io/blog/2021/03/21/%E9%9D%A2%E8%AF%95%E9%A2%981/&title=《JS经典面试题Foo().getname()》 — Blog&source=文章摘要：解读new Foo().getname()" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://jrr997.github.io/blog/2021/03/21/%E9%9D%A2%E8%AF%95%E9%A2%981/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《JS经典面试题Foo().getname()》 — Blog&url=https://jrr997.github.io/blog/2021/03/21/%E9%9D%A2%E8%AF%95%E9%A2%981/&via=https://jrr997.github.io/blog" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://jrr997.github.io/blog/2021/03/21/%E9%9D%A2%E8%AF%95%E9%A2%981/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+          </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/blog/2021/03/12/HTTP2/" id="post-next" class="post-nav-link">
+        <h4 class="title" data-hover="下一篇：HTTP2">下一篇：HTTP2</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+      
+    
+
+    
+
+    
+
+
+  </article>
+
+    </div>
+
+        <footer class="footer">
+  <div class="footer-content">
+    <!-- <span class="power">
+            <i class="icon icon-lg icon-copyright"></i>
+            2017
+            <i class="icon icon-lg icon-heart"></i>
+            <a href="https://jrr997.github.io/blog">tomotoes.com</a>
+            <br/>
+            Power by
+            <a href="https://hexo.io/" target="_blank" rel="external nofollow">Hexo</a>&nbsp;·&nbsp;
+            Theme
+            <a class="tomotoeslink" href="https://github.com/tomotoes/hexo-theme-tomotoes/" target="_blank" rel="external nofollow">tomotoes</a>
+        </span> -->
+
+    <br/>
+
+    <span id="RunTime" style="color:#a7a7a2;"></span>
+    <br/>
+
+    <span>
+            
+	<i class="icon icon-lg icon-user">
+<span id="busuanzi_container_site_uv" style='display:none'>
+       访问用户：<span id="busuanzi_value_site_uv"></span>
+    </span>人</i>
+    ·
+    <i class="icon icon-lg icon-eye">
+    <span id="busuanzi_container_site_pv" style='display:none'>
+      访问次数：<span id="busuanzi_value_site_pv"></span>
+    </span>次
+    </i>
+
+
+        </span>
+    <br/>
+
+    <span class="license"><a  target="_blank" rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">博客内容遵循 知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+  </div>
+</footer>
+
+    </main>
+    
+        
+
+    
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://jrr997.github.io/blog/2021/03/21/%E9%9D%A2%E8%AF%95%E9%A2%981/&title=《JS经典面试题Foo().getname()》 — Blog&pic=https://jrr997.github.io/blog/img/mypic.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://jrr997.github.io/blog/2021/03/21/%E9%9D%A2%E8%AF%95%E9%A2%981/&title=《JS经典面试题Foo().getname()》 — Blog&source=文章摘要：解读new Foo().getname()" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://jrr997.github.io/blog/2021/03/21/%E9%9D%A2%E8%AF%95%E9%A2%981/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《JS经典面试题Foo().getname()》 — Blog&url=https://jrr997.github.io/blog/2021/03/21/%E9%9D%A2%E8%AF%95%E9%A2%981/&via=https://jrr997.github.io/blog" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://jrr997.github.io/blog/2021/03/21/%E9%9D%A2%E8%AF%95%E9%A2%981/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p class="wechatshare">扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACwElEQVR42u3a0WocMQwF0Pz/T6fQpxays/dKNt3Cmacwm9g+XrAcSV9f8fP9+3n1/s/n1V+9+vT5b59HOPbg4eHhjZb+6nmeLGcnv//8/tXsb8bHw8PDu8Zrh94Hhvb9cDQ8PDy8f8rLj+bkijy7uOPh4eH9v7z8fR5g8mQHHh4e3ifwkmREkpBtl5vM1YYlPDw8vNu8tgD2CT9frO/h4eHhLarqs/JVntJNfnOzWjw8PLwbvP3EyVU7/zS/OhdXeTw8PLwLvLzE1SYj2qXMUhLRhRsPDw/vEC8vXOVJ2/ZYP9XE8MMIeHh4eNd4m0O/LfmfbS8oci14eHh4h3izq/PZBG6yoS1v2LeFh4eHN+LtD+4cPEsWt5uLh4eHd5aXpxvayWZtUvuNKxaKh4eHd5S3L4DtWwRmX8lfP+Ph4eFd4G0SCm2QyEtoeVCJvgA8PDy8o7xZYMinnBX+21D0cm14eHh413j7wBAVopLr7yIwvIx4eHh4eEd5CTJZSlvumqUk8sRu8R3i4eHhLXibQld79LdNV3mTwZtcCx4eHt4hXns5bo/vDT7foKiNAA8PD+8Q7+wR3F6R2y2ok8t4eHh4R3mzclSOzMtg+QbVPWV4eHh4R3mzItZmoW2bwvPI0Zrx8PDwjvJmCYVZwmIzV1sAw8PDw7vH26cAZgX+omUqmKUozuHh4eGtebOUwSyJMEs65O1ZRTcZHh4e3oKXp2Xz1EN+8Z0VxvJqFx4eHt4N3nf5tPhkhFOp3h8+xcPDw7vAa4/dltEutE2ODLvM8PDw8Na89p//2cSbjcsDw7DpCg8PD2/Em6VZN9fitrg1DDN4eHh4H8BLBk0SFu1B37Z54eHh4X0CLz+OZ1szSze8CUt4eHh413inkhGzZqw8nTEMDHh4eHhHeW0BrG0XSAJP3iLwPMKB+h4eHh7e05tfitkiFuyoUCQAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <!-- waves按钮特效 -->
+<script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+
+<!-- 主题配置脚本 -->
+<script>
+var BLOG = { ROOT: '/blog/', SHARE: true, REWARD: false };
+</script>
+
+<!-- jquery -->
+<script src="/blog/js/jquery.min.js?v=3.0"></script>
+
+<!-- 搜索 -->
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item waves-block waves-effect" onclick="location.href='{path}'">
+    <div class="title ellipsis" title="{title}">{title}</div>
+</li>
+</template>
+
+
+<!-- main博客脚本 -->
+<script src="/blog/js/main.min.js?v=3.0" ></script>
+
+<!-- 动画&配置 -->
+<script src="/blog/js/script.min.js?v=3.0" ></script>
+
+<!-- 脚本管理 -->
+<script>
+
+if(window.innerWidth > 800){
+	/* 3D标题 */
+	$(".content-header").on("mousemove", threedee);
+
+	/* 底部追随鼠标 */
+	$(".footer").hover(2);
+
+	/* gotop键的涟漪 */
+	$("#gotop").hover(1);
+
+	/* 赞赏的粒子雨 */
+	$("#reward").hover(3);
+
+	/* 微信公众号的底部渲染 */
+	$("#wechat").hover(4);
+
+    /* 标题跳动 */
+    $(".archivestitle").bumpyText();
+
+	/* 图片点击放大 */
+	const postimg = jQuery(".post-content img:not(.github-emoji)");
+	postimg.on("click",function(){
+
+		mask.classList.add("in");
+		main.classList.add("Mask");
+		menu.classList.add("Mask");
+		var myimg = this.cloneNode(true);
+		myimg.classList.add("imgShow");
+
+		setTimeout(function(){
+			jQuery(myimg).animate({
+				opacity:"1"
+			},1000);
+		},0);
+
+		document.body.appendChild(myimg);
+
+		myimg.onclick=function(){
+			document.body.removeChild(myimg);
+			mask.classList.remove("in");
+			main.classList.remove("Mask");
+			menu.classList.remove("Mask");
+		};
+
+	});
+
+}
+
+/* 名字跳动 */
+$("#name").bumpyText();
+
+
+/* 网站运行时间 */
+setInterval(function () {
+	setTime("2021/2/17");
+}, 1000);
+
+/* 文章块的淡出 */
+postshow();
+
+/* 座右铭 */
+
+   getHitokoto();
+
+
+
+/* 粘贴提示 */
+G($(".post-content"), location.href, "Zack Chang");
+
+
+/* 控制台 */
+if (window.console && window.console.log) {
+	setTimeout(function () {
+		console.log("\n %c 一个坏掉的番茄 %c  © Simon Ma  http://tomotoes.com \n\n", "color:#FFFFFB;background:#1abc9c;padding:5px 0;border-radius:.5rem 0 0 .5rem;", "color:#FFFFFB;background:#080808;padding:5px 0;border-radius:0 .5rem .5rem 0;");
+	}, 0);
+}
+
+</script>
+
+
+
+
+<!-- 公式渲染 -->
+
+
+
+<!-- 不蒜子 -->
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+</body>
+</html>
